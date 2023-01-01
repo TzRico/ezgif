@@ -5,7 +5,7 @@ updategit() {
   echo "Atualizando o código do gifmaker..."
   if [ ! -d ".git" ]; then
     git init . --initial-branch=master
-    git remote add origin https://github.com/Tzputao/gifmaker.git
+    git remote add origin https://github.com/Tzputao/ezgif.git
   fi
   git fetch --all
   git reset --hard origin/master
