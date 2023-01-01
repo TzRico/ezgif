@@ -1,8 +1,8 @@
 #!/bin/bash
 
 updategit() {
-  # remote isnt set up by default when container is set up
-  echo "Updating MediaForge Code..."
+  # remoto não é configurado por padrão quando o contêiner é configurado
+  echo "Atualizando o código do gifmaker..."
   if [ ! -d ".git" ]; then
     git init . --initial-branch=master
     git remote add origin https://github.com/Tzputao/gifmaker.git
@@ -11,31 +11,31 @@ updategit() {
   git reset --hard origin/master
 }
 updateapt() {
-  echo "Updating APT Packages..."
+  echo "Atualizando pacotes APT..."
   apt-get update -y
   apt-get install -t experimental -y ffmpeg
   apt-get upgrade -y
   apt autoremove -y
-  echo "Done!"
+  echo "Feito!"
 }
 updatepip() {
-  # remote isnt set up by default when container is set up
-  echo "Updating PIP Packages..."
+  # remoto não é configurado por padrão quando o contêiner é configurado
+  echo "Atualizando pacotes PIP..."
   python -m poetry install
 }
 
 run() {
-  # remote isnt set up by default when container is set up
+  # remoto não é configurado por padrão quando o contêiner é configurado
   echo "Running..."
   python -m poetry run python src/main.py
 }
 
-# mediaforge ascii art :3
+# arte ascii do Gifmaker :3
 cat "media/active/braillebanner.txt"
 printf "\n\n"
 
 if [ "$AUTOMODE" == "ON" ] && [ "$CONFIG" != "" ]; then
-  echo "We're in automode. Running MediaForge"
+  echo "Estamos em modo automático. Executando o Gifmaker"
   if [ "$AUTOUPDATE" == "ON" ]; then
     updategit
     updateapt
@@ -46,39 +46,39 @@ if [ "$AUTOMODE" == "ON" ] && [ "$CONFIG" != "" ]; then
   exit
 fi
 
-# weird variable name thing for prompt
-PS3='What would you like to do? '
-choices=("Run MediaForge" "Edit Config" "Update All And Run" "Update MediaForge Code" "Update APT Packages" "Update PIP Packages" "Debug Shell" "Quit")
+# coisa estranha de nome de variável para prompt
+PS3='O que você gostaria de fazer? '
+choices=("Execute o Gifmaker" "Editar configuração" "Atualize tudo e execute" "Atualizar código do Gifmaker" "Atualizar pacotes APT" "Atualizar pacotes PIP" "Shell de depuração" "Desistir")
 select fav in "${choices[@]}"; do
   case $fav in
-  "Run MediaForge")
+  "Execute o Gifmaker")
     run
     ;;
-  "Edit Config")
+  "Editar configuração")
     nano config.py
     ;;
-  "Update All And Run")
+  "Atualize tudo e execute")
     updategit
     updateapt
     updatepip
     run
     ;;
-  "Update MediaForge Code")
+  "Atualizar código do Gifmaker")
     updategit
     ;;
-  "Update APT Packages")
+  "Atualizar pacotes APT")
     updateapt
     ;;
-  "Update PIP Packages")
+  "Atualizar pacotes PIP")
     updatepip
     ;;
-  "Debug Shell")
+  "Shell de depuração")
     /bin/bash
     ;;
-  "Quit")
-    echo "Goodbye!"
+  "Desistir")
+    echo "Adeus!"
     exit
     ;;
-  *) echo "invalid option $REPLY" ;;
+  *) echo "opção inválida $REPLY" ;;
   esac
 done

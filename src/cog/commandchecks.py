@@ -16,21 +16,21 @@ class CommandChecksCog(commands.Cog):
     async def banned_users(self, ctx: commands.Context):
         if await self.bot.is_owner(ctx.author):
             return True
-        async with database.db.execute("SELECT banreason from bans WHERE user=?", (ctx.author.id,)) as cur:
+        async with database.db.execute("SELECIONE o motivo do banimento dos banimentos WHERE user=?", (ctx.author.id,)) as cur:
             ban = await cur.fetchone()
         if ban:
-            outtext = "You are banned from this bot"
+            outtext = "Você foi banido deste bot"
             if ban[0]:
-                outtext += f" for the following reason:\n{quote(ban[0])}\n"
+                outtext += f" pelo seguinte motivo:\n{quote(ban[0])}\n"
             else:
                 outtext += f".\n"
             outtext += f"To appeal this, "
             if self.bot.owner_id == 214511018204725248:  # my ID; public bot
-                outtext += "raise an issue at https://github.com/HexCodeFFF/mediaforge/issues/new?assignees=" \
+                outtext += "levantar uma questão em https://github.com/HexCodeFFF/mediaforge/issues/new?assignees=" \
                            "&labels=unban+request&template=unban_request.yaml&title=Unban+request+for" \
                            "+%3CYOUR+NAME+HERE%3E"
             else:
-                outtext += "contact the bot owner."
+                outtext += "entre em contato com o proprietário do bot."
             raise commands.CheckFailure(outtext)
         else:
             return True
@@ -43,7 +43,7 @@ class CommandChecksCog(commands.Cog):
             return True
         for block in config.blocked_words:
             if block.lower() in ctx.message.content.lower():
-                raise commands.CheckFailure("Your command contains one or more blocked words.")
+                raise commands.CheckFailure("Seu comando contém uma ou mais palavras bloqueadas.")
         return True
 
     # @commands.check
@@ -53,7 +53,7 @@ class CommandChecksCog(commands.Cog):
             return True
         # owner(s) are exempt from cooldown
         if await self.bot.is_owner(ctx.message.author):
-            logger.debug("Owner ran command, exempt from cooldown.")
+            logger.debug("O proprietário executou o comando, isento de cooldown.")
             return True
         # Then apply a bot check that will run before every command
         # Very similar to ?tag cooldown mapping but in Bot scope instead of Cog scope

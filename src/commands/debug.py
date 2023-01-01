@@ -21,7 +21,7 @@ from utils.scandiscord import imagesearch
 from utils.web import saveurls
 
 
-class Debug(commands.Cog, name="Owner Only", command_attrs=dict(hidden=True)):
+class Debug(commands.Cog, name="Somente Proprietário", command_attrs=dict(hidden=True)):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
 

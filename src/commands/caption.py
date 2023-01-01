@@ -7,9 +7,9 @@ import processing.vips.vipsutils
 from core.process import process
 
 
-class Caption(commands.Cog, name="Captioning"):
+class Caption(commands.Cog, name="Legendas"):
     """
-    Commands to caption media.
+    Comandos para legendar mídia.
     """
 
     def __init__(self, bot):
@@ -18,11 +18,11 @@ class Caption(commands.Cog, name="Captioning"):
     @commands.hybrid_command(aliases=["demotivate", "motivational", "demotivational", "inspire", "uninspire"])
     async def motivate(self, ctx, *, caption):
         """
-        Captions media in the style of demotivational posters.
+        Mídia de legendas no estilo de cartazes desmotivacionais.
 
         :param ctx: discord context
-        :param caption: The caption text. Optionally add a bottom text with a `|` character.
-        :mediaparam media: A video, gif, or image.
+        :param caption: O texto da legenda. Opcionalmente, adicione um texto inferior com um caractere `|`.
+        :mediaparam media: Um vídeo, gif ou imagem.
         """
         caption = caption.split("|")
         if len(caption) == 1:

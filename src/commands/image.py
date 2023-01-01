@@ -10,9 +10,9 @@ from core.process import process
 from processing import sus
 
 
-class Image(commands.Cog, name="Creation"):
+class Image(commands.Cog, name="Criação"):
     """
-    Generate images from a template.
+    Gere imagens a partir de um modelo.
     """
 
     def __init__(self, bot):

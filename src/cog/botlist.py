@@ -18,15 +18,15 @@ class DiscordListsPost(commands.Cog):
     @commands.is_owner()
     async def post(self, ctx: commands.Context):
         """
-        Manually posts guild count using discordlists.py (BotBlock)
+        Posta manualmente a contagem de servidor usando discordlists.py (BotBlock)
         """
         try:
             result = await self.api.post_count()
         except Exception as e:
-            await ctx.send(f"Request failed: `{e}`")
+            await ctx.send(f"Falha na solicitação: `{e}`")
             return
 
-        await ctx.send("Successfully manually posted server count ({:,}) to {:,} lists."
-                       "\nFailed to post server count to {:,} lists.".format(self.api.server_count,
+        await ctx.send("Contagem de servidor postada manualmente com sucesso ({:,}) para {:,} listas."
+                       "\nFalha ao postar a contagem de servidores nas listas {:,}.".format(self.api.server_count,
                                                                              len(result["success"].keys()),
                                                                              len(result["failure"].keys())))

@@ -8,10 +8,10 @@ db: aiosqlite.Connection
 
 async def init_database():
     global db
-    logger.debug("database connecting")
+    logger.debug("conexão de banco de dados")
     db = await aiosqlite.connect(config.db_filename)
 
 
 async def close_database():
-    logger.debug("database disconnecting")
+    logger.debug("banco de dados desconectado")
     await db.close()

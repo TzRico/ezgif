@@ -23,7 +23,7 @@ from utils.scandiscord import tenorsearch
 from utils.tempfiles import reserve_tempfile
 
 
-class Conversion(commands.Cog, name="Conversion"):
+class Conversion(commands.Cog, name="Conversão"):
     """
     Comandos para converter tipos de mídia e baixar mídia hospedada na Internet.
     """
@@ -62,9 +62,9 @@ class Conversion(commands.Cog, name="Conversion"):
         Pega o URL do ícone de um usuário ou servidor do Discord.
 
         Este comando funciona com IDs. as menções do usuário contêm o ID
-        internamente, portanto, mencionar um usuário funcionará. Para obter o ícone de uma guilda, copie o ID da guilda e use-o como
+        internamente, portanto, mencionar um usuário funcionará. Para obter o ícone de um servidor, copie o ID do servidor e use-o como
         o parâmetro. Para obter o ícone de uma mensagem de webhook, copie o ID da mensagem e ***no mesmo canal que
-        a mensagem***usa o ID da mensagem como parâmetro. Isso também funcionará para usuários normais, embora eu não tenha
+        a mensagem*** usa o ID da mensagem como parâmetro. Isso também funcionará para usuários normais, embora eu não tenha
         idéia de por que você faria dessa maneira.
 
 
@@ -83,7 +83,7 @@ class Conversion(commands.Cog, name="Conversion"):
         if result:
             await ctx.reply("\n".join(result)[0:2000])
         else:
-            await ctx.send(f"{config.emojis['warning']} Nenhum usuário, guilda ou ID de mensagem válido encontrado.")
+            await ctx.send(f"{config.emojis['warning']} Nenhum usuário, servidor ou ID de mensagem válido encontrado.")
 
     @commands.hybrid_command(
         aliases=["youtube", "youtubedownload", "youtubedl", "ytdownload", "download", "dl", "ytdl"])
@@ -163,12 +163,12 @@ class Conversion(commands.Cog, name="Conversion"):
     @commands.hybrid_command(aliases=["tenorgif", "tenormp4", "rawtenor"])
     async def tenorurl(self, ctx, gif: bool = True):
         """
-        Sends the raw url for a tenor gif.
-        mp4 compression is nearly invisible compared to GIF compression which is very visible
+        Envia o URL bruto para um gif tenor.
+        a compactação mp4 é quase invisível em comparação com a compactação GIF, que é muito visível
 
-        :param gif: if true, sends GIF url. if false, sends mp4 url.
-        :param ctx: discord context
-        :mediaparam gif: any gif sent from tenor.
+        :param gif: se verdadeiro, envia url GIF. se falso, envia url mp4.
+        :param ctx: contexto de discórdia
+        :mediaparam gif: qualquer gif enviado pelo tenor.
         """
         file = await tenorsearch(ctx, gif)
         if file:
@@ -179,31 +179,31 @@ class Conversion(commands.Cog, name="Conversion"):
     @commands.hybrid_command(aliases=["video", "giftovideo", "tomp4", "mp4"])
     async def tovideo(self, ctx):
         """
-        Converts a GIF to a video.
+        Converte um GIF em um vídeo.
 
         :param ctx: discord context
-        :mediaparam gif: A gif.
+        :mediaparam gif: para gif.
         """
         await process(ctx, processing.ffmpeg.giftomp4, [["GIF"]])
 
     @commands.hybrid_command(aliases=["png", "mediatopng"])
     async def topng(self, ctx):
         """
-        Converts media to PNG
+        Converte mídia para PNG
 
-        :param ctx: discord context
-        :mediaparam media: A video, gif, or image.
+        :param ctx: contexto de discórdia
+        :mediaparam media: Um vídeo, gif ou imagem.
         """
         await process(ctx, processing.ffmpeg.mediatopng, [["VIDEO", "GIF", "IMAGE"]])
 
     @commands.command(aliases=["emoji", "emojiimage", "emote", "emoteurl"])  # TODO: hybrid
     async def emojiurl(self, ctx, *custom_emojis: discord.PartialEmoji):
         """
-        Sends the raw image for a custom Discord emoji.
-        Each emoji is sent as a separate message intentionally to allow replying with a media command.
+        Envia a imagem bruta para um emoji personalizado do Discord.
+        Cada emoji é enviado como uma mensagem separada intencionalmente para permitir a resposta com um comando de mídia.
 
-        :param ctx: discord context
-        :param custom_emojis: Custom emojis to send the URL of. Be sure to put a space between them.
+        :param ctx: contexto de discórdia
+        :param custom_emojis: Emojis personalizados para enviar a URL. Certifique-se de deixar um espaço entre eles.
         """
         if emojis:
             out = []
@@ -212,16 +212,16 @@ class Conversion(commands.Cog, name="Conversion"):
                     out.append(str(emoji.url))
             await ctx.send("\n".join(out))
         else:
-            raise commands.BadArgument(f"Your message doesn't contain any custom emojis!")
+            raise commands.BadArgument(f"Sua mensagem não contém emojis personalizados!")
 
     @commands.hybrid_command()
     async def twemoji(self, ctx: commands.Context, *, twemojis: UnicodeEmojisConverter):
         """
-        Sends the twemoji image for an emoji.
-        Twemoji is the open source emoji set that discord desktop and twitter use. https://twemoji.twitter.com/
+        Envia a imagem twemoji para um emoji.
+        Twemoji é o conjunto de emojis de código aberto que a área de trabalho do Discord e o Twitter usam. https://twemoji.twitter.com/
 
-        :param ctx: discord context
-        :param twemojis: Up to 5 default discord/unicode emojis
+        :param ctx: contexto de discórdia
+        :param twemojis: Até 5 emojis discórdia/unicode padrão
         """
         if ctx.message.reference:
             msg = ctx.message.reference.resolved.content
@@ -234,13 +234,13 @@ class Conversion(commands.Cog, name="Conversion"):
                 chars = "-".join(chars).replace("/", "")
                 urls.append(f"https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/{chars}.png")
         else:
-            raise commands.BadArgument(f"No default emojis found!")
+            raise commands.BadArgument(f"Nenhum emoji padrão encontrado!")
 
         async def upload_url(url: str):
             try:
                 await ctx.reply(file=discord.File(await utils.web.saveurl(url)))
             except aiohttp.ClientResponseError as e:
-                await ctx.reply(f"Failed to upload {url}: Code {e.status}: {e.message}")
+                await ctx.reply(f"Falha ao carregar {url}: Código {e.status}: {e.message}")
 
         if urls:
             await asyncio.gather(*[upload_url(url) for url in urls])

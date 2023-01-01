@@ -12,9 +12,9 @@ import processing.vips.other
 import processing.other
 
 
-class Media(commands.Cog, name="Editing"):
+class Media(commands.Cog, name="Edição"):
     """
-    Basic media editing/processing commands.
+    Comandos básicos de edição/processamento de mídia.
     """
 
     def __init__(self, bot):
@@ -23,33 +23,33 @@ class Media(commands.Cog, name="Editing"):
     @commands.hybrid_command(aliases=["copy", "nothing", "noop"])
     async def repost(self, ctx):
         """
-        Reposts media as-is.
+        Repassa a mídia como está.
 
-        :param ctx: discord context
-        :mediaparam media: Any valid media.
+        :param ctx: contexto de discord
+        :mediaparam media: Qualquer mídia válida.
         """
         await process(ctx, lambda x: x, [["VIDEO", "GIF", "IMAGE", "AUDIO"]])
 
     @commands.hybrid_command(aliases=["clean", "remake"])
     async def reencode(self, ctx):
         """
-        Re-encodes media.
-        Videos become libx264 mp4s, audio files become libmp3lame mp3s, images become pngs.
+        Recodifica a mídia.
+        Os vídeos se tornam libx264 mp4s, os arquivos de áudio se tornam libmp3lame mp3s, as imagens se tornam pngs.
 
-        :param ctx: discord context
-        :mediaparam media: A video, image, or audio file.
+        :param ctx: contexto de discord
+        :mediaparam media: Um arquivo de vídeo, imagem ou áudio.
         """
         await process(ctx, processing.ffmpeg.allreencode, [["VIDEO", "IMAGE", "AUDIO"]])
 
     @commands.hybrid_command(aliases=["audioadd", "dub"])
     async def addaudio(self, ctx, loops: commands.Range[int, -1, 100] = -1):
         """
-        Adds audio to media.
+        Adiciona áudio à mídia.
 
-        :param ctx: discord context
-        :param loops: Amount of times to loop a gif. -1 loops infinitely, 0 only once. Must be between -1 and 100.
-        :mediaparam media: Any valid media file.
-        :mediaparam audio: An audio file.
+        :param ctx: contexto de discord
+        :param loops: Quantidade de vezes para repetir um gif. -1 loops infinitamente, 0 apenas uma vez. Deve estar entre -1 e 100.
+        :mediaparam media: Qualquer arquivo de mídia válido.
+        :mediaparam audio: Um arquivo de áudio.
         """
         await process(ctx, processing.ffmpeg.addaudio, [["IMAGE", "GIF", "VIDEO", "AUDIO"], ["AUDIO"]], loops)
 
@@ -58,14 +58,14 @@ class Media(commands.Cog, name="Editing"):
                    stretch: commands.Range[int, 0, 40] = 20,
                    quality: commands.Range[int, 1, 95] = 10):
         """
-        Makes media into a low quality jpeg
+        Transforma a mídia em um jpeg de baixa qualidade
 
-        :param ctx: discord context
-        :param strength: amount of times to jpegify image. must be between 1 and 100.
-        :param stretch: randomly stretch the image by this number on each jpegification. can cause strange effects
-        on videos. must be between 0 and 40.
-        :param quality: quality of JPEG compression. must be between 1 and 95.
-        :mediaparam media: An image.
+        :param ctx: contexto de discord
+        :param strength: quantidade de vezes para jpegify imagem. deve estar entre 1 e 100.
+        :param stretch: estique aleatoriamente a imagem por esse número em cada jpegificação. pode causar efeitos estranhos
+        em vídeos. deve estar entre 0 e 40.
+        :param quality: qualidade da compressão JPEG. deve estar entre 1 e 95.
+        :mediaparam media: Uma imagem.
         """
         await process(ctx, processing.vips.other.jpeg, [["IMAGE"]], strength, stretch, quality, run_parallel=True)
 
@@ -76,16 +76,16 @@ class Media(commands.Cog, name="Editing"):
                       saturation: commands.Range[float, 0, 3] = 1.5,
                       noise: commands.Range[float, 0, 100] = 20):
         """
-        Applies many filters to the input to make it appear "deep-fried" in the style of deep-fried memes.
+        Aplica muitos filtros à entrada para fazê-la parecer "frita" no estilo de memes fritos.
 
 
-        :param ctx: discord context
-        :param brightness: value of 0 makes no change to the image. must be between -1 and 1.
-        :param contrast: value of 1 makes no change to the image. must be between 0 and 5.
-        :param sharpness: value of 0 makes no change to the image. must be between 0 and 5.
-        :param saturation: value of 1 makes no change to the image. must be between 0 and 3.
-        :param noise: value of 0 makes no change to the image. must be between 0 and 100.
-        :mediaparam media: A video, gif, or image.
+        :param ctx: contexto de discord
+        :param brightness: valor de 0 não faz nenhuma alteração na imagem. deve estar entre -1 e 1.
+        :param contrast: valor de 1 não faz nenhuma alteração na imagem. deve estar entre 0 e 5.
+        :param sharpness: valor de 0 não faz nenhuma alteração na imagem. deve estar entre 0 e 5.
+        :param saturation: valor de 1 não faz nenhuma alteração na imagem. deve estar entre 0 e 3.
+        :param noise: valor de 0 não faz nenhuma alteração na imagem. deve estar entre 0 e 100.
+        :mediaparam media: um vídeo, gif ou imagem.
         """
         await process(ctx, processing.ffmpeg.deepfry, [["VIDEO", "GIF", "IMAGE"]], brightness, contrast, sharpness,
                       saturation, noise)
@@ -93,45 +93,45 @@ class Media(commands.Cog, name="Editing"):
     @commands.hybrid_command(aliases=["pad"])
     async def square(self, ctx):
         """
-        Pads media into a square shape.
+        Preenche a mídia em um formato quadrado.
 
-        :param ctx: discord context
-        :mediaparam media: A video, gif, or image.
+        :param ctx: contexto de discord
+        :mediaparam media: Um vídeo, gif ou imagem.
         """
         await process(ctx, processing.ffmpeg.pad, [["VIDEO", "GIF", "IMAGE"]])
 
     @commands.hybrid_command(aliases=["size"])
     async def resize(self, ctx, width: int, height: int):
         """
-        Resizes an image.
+        Redimensiona uma imagem.
 
-        :param ctx: discord context
-        :param width: width of output image. set to -1 to determine automatically based on height and aspect ratio.
-        :param height: height of output image. also can be set to -1.
-        :mediaparam media: A video, gif, or image.
+        :param ctx: contexto de discord
+        :param width: largura da imagem de saída. defina como -1 para determinar automaticamente com base na altura e proporção.
+        :param height: altura da imagem de saída. também pode ser definido como -1.
+        :mediaparam media: Um vídeo, gif ou imagem.
         """
         if not (1 <= width <= config.max_size or width == -1):
-            raise commands.BadArgument(f"Width must be between 1 and "
-                                       f"{config.max_size} or be -1.")
+            raise commands.BadArgument(f"A largura deve estar entre 1 e "
+                                       f"{config.max_size} ou ser -1.")
         if not (1 <= height <= config.max_size or height == -1):
-            raise commands.BadArgument(f"Height must be between 1 and "
-                                       f"{config.max_size} or be -1.")
+            raise commands.BadArgument(f"A altura deve estar entre 1 e "
+                                       f"{config.max_size} ou ser -1.")
         await process(ctx, processing.ffmpeg.resize, [["VIDEO", "GIF", "IMAGE"]], width, height, resize=False)
 
     @commands.hybrid_command(aliases=["short", "kyle"])
     async def wide(self, ctx):
         """
-        makes media twice as wide
+        torna a mídia duas vezes mais larga
 
-        :param ctx: discord context
-        :mediaparam media: A video, gif, or image.
+        :param ctx: contexto de discord
+        :mediaparam media: Um vídeo, gif ou imagem.
         """
         await process(ctx, processing.ffmpeg.resize, [["VIDEO", "GIF", "IMAGE"]], "iw*2", "ih")
 
     @commands.hybrid_command(aliases=["tall", "long", "antikyle"])
     async def squish(self, ctx):
         """
-        makes media twice as tall
+        torna a mídia duas vezes mais alta
 
 
         """
@@ -140,34 +140,34 @@ class Media(commands.Cog, name="Editing"):
     @commands.hybrid_command(aliases=["magic", "magik", "contentawarescale", "liquidrescale"])
     async def magick(self, ctx, strength: commands.Range[int, 1, 99] = 50):
         """
-        Apply imagemagick's liquid/content aware scale to an image.
-        This command is a bit slow.
+        Aplique a escala de reconhecimento de líquido/conteúdo do imagemagick a uma imagem.
+        Este comando é um pouco lento.
         https://legacy.imagemagick.org/Usage/resize/#liquid-rescale
 
-        :param ctx: discord context
-        :param strength: how strongly to compress the image. smaller is stronger. output image will be strength% of
-        the original size. must be between 1 and 99.
-        :mediaparam media: An image.
+        :param ctx: contexto de discord
+        :param strength: quão forte para comprimir a imagem. menor é mais forte. imagem de saída será força% de
+        o tamanho original. deve estar entre 1 e 99.
+        :mediaparam media: Uma imagem.
         """
         # TODO: add support for gifs/videos
         await process(ctx, processing.other.magickone, [["IMAGE"]], strength)
 
     @commands.hybrid_command(aliases=["repeat"], hidden=True)
     async def loop(self, ctx):
-        """see $gifloop or $videoloop"""
-        await ctx.reply("MediaForge has 2 loop commands.\nUse `$gifloop` to change/limit the amount of times a GIF "
-                        "loops. This ONLY works on GIFs.\nUse `$videoloop` to loop a video. This command "
-                        "duplicates the video contents.")
+        """Vejo $gifloop ou $videoloop"""
+        await ctx.reply("MediaForge tem 2 comandos de loop.\nUse `$gifloop` to alterar/limitar a quantidade de vezes que um GIF "
+                        "rotações. Isso só funciona em GIFs.\nUse `$videoloop` para repetir um vídeo. Este comando "
+                        "duplica o conteúdo do vídeo.")
 
     @commands.hybrid_command(aliases=["gloop"])
     async def gifloop(self, ctx, loop: commands.Range[int, -1] = 0):
         """
-        Changes the amount of times a gif loops
-        See $videoloop for videos.
+        Altera a quantidade de vezes que um gif é repetido
+        Ver $videoloop for videos.
 
-        :param ctx: discord context
-        :param loop: number of times to loop. -1 for no loop, 0 for infinite loop.
-        :mediaparam media: A gif.
+        :param ctx: contexto de discord
+        :param loop: número de vezes para loop. -1 para nenhum loop, 0 para loop infinito.
+        :mediaparam media: para gif.
         """
 
         await process(ctx, processing.ffmpeg.gifloop, [["GIF"]], loop)
@@ -175,89 +175,89 @@ class Media(commands.Cog, name="Editing"):
     @commands.hybrid_command(aliases=["vloop"])
     async def videoloop(self, ctx, loop: commands.Range[int, 1, 15] = 1):
         """
-        Loops a video
-        See $gifloop for gifs.
+        repete um vídeo
+        Ver $gifloop para gifs.
 
-        :param ctx: discord context
-        :param loop: number of times to loop.
-        :mediaparam media: A video.
+        :param ctx: contexto de discord
+        :param loop: número de vezes para loop.
+        :mediaparam mídia: um vídeo.
         """
         await process(ctx, processing.ffmpeg.videoloop, [["VIDEO"]], loop)
 
     @commands.hybrid_command(aliases=["flip", "rot"])
     async def rotate(self, ctx, rottype: typing.Literal["90", "90ccw", "180", "vflip", "hflip"]):
         """
-        Rotates and/or flips media
+        Gira e/ou vira a mídia
 
-        :param ctx: discord context
-        :param rottype: 90: 90° clockwise, 90ccw: 90° counter clockwise, 180: 180°, vflip: vertical flip, hflip:
-        horizontal flip
-        :mediaparam media: A video, gif, or image.
+        :param ctx: contexto de discord
+        :param rottype: 90: 90° no sentido horário, 90ccw: 90° no sentido anti-horário, 180: 180°, vflip: giro vertical, hflip:
+        giro horizontal
+        :mediaparam media: Um vídeo, gif ou imagem.
         """
         await process(ctx, processing.ffmpeg.rotate, [["GIF", "IMAGE", "VIDEO"]], rottype)
 
     @commands.hybrid_command()
     async def hue(self, ctx, h: float):
         """
-        Change the hue of media.
-        see https://ffmpeg.org/ffmpeg-filters.html#hue
+        Altere a tonalidade da mídia.
+        Vejo https://ffmpeg.org/ffmpeg-filters.html#hue
 
-        :param ctx: discord context
-        :param h: The hue angle as a number of degrees.
-        :mediaparam media: A video, gif, or image.
+        :param ctx: contexto de discord
+        :param h: O ângulo de matiz como um número de graus.
+        :mediaparam media: Um vídeo, gif ou imagem.
         """
         await process(ctx, processing.ffmpeg.hue, [["GIF", "IMAGE", "VIDEO"]], h)
 
     @commands.hybrid_command(aliases=["color", "recolor"])
     async def tint(self, ctx, color: discord.Color):
         """
-        Tint media to a color.
-        This command first makes the image grayscale, then replaces white with your color.
-        The resulting image should be nothing but shades of your color.
+        Tingir a mídia com uma cor.
+        Este comando primeiro torna a imagem em tons de cinza e, em seguida, substitui o branco pela sua cor.
+        A imagem resultante não deve ser nada além de tons de sua cor.
 
-        :param ctx: discord context
-        :param color: The hex or RGB color to tint to.
-        :mediaparam media: A video, gif, or image.
+        :param ctx: contexto de discord
+        :param color: A cor hexadecimal ou RGB para tingir.
+        :mediaparam media: Um vídeo, gif ou imagem.
         """
         await process(ctx, processing.ffmpeg.tint, [["GIF", "IMAGE", "VIDEO"]], color)
 
     @commands.hybrid_command(aliases=["round", "circlecrop", "roundcrop", "circle", "roundedcorners"])
     async def roundcorners(self, ctx, radius: int = 10):
         """
-        Round corners of media
-        see https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius
+        Cantos arredondados da mídia
+        Vejo https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius
 
-        :param ctx: discord context
-        :param radius: the size of the rounded corners in pixels
-        :mediaparam media: A video, gif, or image.
+        :param ctx: contexto de discord
+        :param radius: to tamanho dos cantos arredondados em pixels
+        :mediaparam media: Um vídeo, gif ou imagem.
         """
         if not 0 <= radius:
-            raise commands.BadArgument(f"Border radius percent must be above 0")
+            raise commands.BadArgument(f"A porcentagem do raio da borda deve estar acima de 0")
         await process(ctx, processing.ffmpeg.round_corners, [["GIF", "IMAGE", "VIDEO"]], radius)
 
     @commands.hybrid_command()
     async def volume(self, ctx, volume: commands.Range[float, 0, 32]):
         """
-        Changes the volume of media.
-        To make 2x as loud, use `$volume 2`.
-        This command changes *perceived loudness*, not the raw audio level.
-        WARNING: ***VERY*** LOUD AUDIO CAN BE CREATED
+        Altera o volume da mídia.
+        Para fazer 2x mais alto, use `$volume 2`.
+        Este comando altera o *volume percebido*, não o nível de áudio bruto.
+        AVISO: ***MUITO*** ÁUDIO ALTO PODE SER CRIADO
 
-        :param ctx: discord context
-        :param volume: number to multiply the percieved audio level by. Must be between 0 and 32.
-        :mediaparam media: A video or audio file.
+        :param ctx: contexto de discord
+        :param volume: número para multiplicar o nível de áudio percebido. Deve estar entre 0 e 32.
+        :mediaparam media: Um arquivo de vídeo ou áudio.
         """
         if not 0 <= volume <= 32:
-            raise commands.BadArgument(f"{config.emojis['warning']} Volume must be between 0 and 32.")
+            raise commands.BadArgument(f"{config.emojis['warning']} O volume deve estar entre 0 e 32.")
         await process(ctx, processing.ffmpeg.volume, [["VIDEO", "AUDIO"]], volume)
 
     @commands.hybrid_command()
     async def mute(self, ctx):
         """
-        alias for $volume 0
+        alias para $volume 0
 
-        :param ctx: discord context
-        :mediaparam media: A video or audio file.
+        :param ctx: contexto de discord
+        :mediaparam media: Um arquivo de vídeo ou áudio.
         """
         await process(ctx, processing.ffmpeg.volume, [["VIDEO", "AUDIO"]], 0)
 
@@ -265,26 +265,26 @@ class Media(commands.Cog, name="Editing"):
     async def vibrato(self, ctx, frequency: commands.Range[float, 0.1, 20000.0] = 5,
                       depth: commands.Range[float, 0, 1] = 1):
         """
-        Applies a "wavy pitch"/vibrato effect to audio.
-        officially described as "Sinusoidal phase modulation"
-        see https://ffmpeg.org/ffmpeg-filters.html#tremolo
+        Aplica um efeito de "pitch ondulado"/vibrato ao áudio.
+        oficialmente descrito como "modulação de fase senoidal"
+        Vejo https://ffmpeg.org/ffmpeg-filters.html#tremolo
 
-        :param ctx: discord context
-        :param frequency: Modulation frequency in Hertz. must be between 0.1 and 20000.
-        :param depth: Depth of modulation as a percentage. must be between 0 and 1.
-        :mediaparam media: A video or audio file.
+        :param ctx: contexto de discord
+        :param frequency: Frequência de modulação em Hertz. deve estar entre 0,1 e 20000.
+        :param depth: Profundidade de modulação em porcentagem. deve estar entre 0 e 1.
+        :mediaparam media: Um arquivo de vídeo ou áudio.
         """
         await process(ctx, processing.ffmpeg.vibrato, [["VIDEO", "AUDIO"]], frequency, depth)
 
     @commands.hybrid_command()
     async def pitch(self, ctx, numofhalfsteps: commands.Range[float, -12, 12] = 12):
         """
-        Changes pitch of audio
+        Altera o tom do áudio
 
-        :param ctx: discord context
-        :param numofhalfsteps: the number of half steps to change the pitch by. `12` raises the pitch an octave and
-        `-12` lowers the pitch an octave. must be between -12 and 12.
-        :mediaparam media: A video or audio file.
+        :param ctx: contexto de discord
+        :param numofhalfsteps: o número de semitons para alterar o tom. `12` aumenta o tom uma oitava e
+        `-12` diminui o tom uma oitava. deve estar entre -12 e 12.
+        :mediaparam media: Um arquivo de vídeo ou áudio.
         """
         if not -12 <= numofhalfsteps <= 12:
             raise commands.BadArgument(f"numofhalfsteps must be between -12 and 12.")
@@ -297,7 +297,7 @@ class Media(commands.Cog, name="Editing"):
         The output video will take on all of the settings of the FIRST video.
         The second video will be scaled to fit.
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :mediaparam video1: A video or gif.
         :mediaparam video2: A video or gif.
         """
@@ -308,7 +308,7 @@ class Media(commands.Cog, name="Editing"):
         """
         Stacks 2 videos horizontally
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :mediaparam video1: A video, image, or gif.
         :mediaparam video2: A video, image, or gif.
         """
@@ -320,7 +320,7 @@ class Media(commands.Cog, name="Editing"):
         """
         Stacks 2 videos horizontally
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :mediaparam video1: A video, image, or gif.
         :mediaparam video2: A video, image, or gif.
         """
@@ -332,7 +332,7 @@ class Media(commands.Cog, name="Editing"):
         """
         Overlays the second input over the first
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :param alpha: the alpha (transparency) of the top video. must be between 0 and 1.
         :mediaparam video1: A video or gif.
         :mediaparam video2: A video or gif.
@@ -345,7 +345,7 @@ class Media(commands.Cog, name="Editing"):
         """
         Adds the pixel values of the second video to the first.
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :mediaparam video1: A video or gif.
         :mediaparam video2: A video or gif.
         """
@@ -358,7 +358,7 @@ class Media(commands.Cog, name="Editing"):
         Changes the speed of media.
         This command preserves the original FPS, which means speeding up will drop frames. See $fps.
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :param speed: Multiplies input video speed by this number. must be between 0.25 and 100.
         :mediaparam media: A video, gif, or audio.
         """
@@ -371,7 +371,7 @@ class Media(commands.Cog, name="Editing"):
         Currently, this command does NOT apply to audio. This is an FFmpeg limitation.
         see https://ffmpeg.org/ffmpeg-filters.html#random
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :param frames: Set size in number of frames of internal cache. must be between 2 and 512. default is 30.
         :mediaparam video: A video or gif.
         """
@@ -382,7 +382,7 @@ class Media(commands.Cog, name="Editing"):
         """
         Reverses media.
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :mediaparam video: A video or gif.
         """
         await process(ctx, processing.ffmpeg.reverse, [["VIDEO", "GIF"]])
@@ -396,7 +396,7 @@ class Media(commands.Cog, name="Editing"):
         CRF info is found at https://trac.ffmpeg.org/wiki/Encode/H.264#crf
         audio quality info is found under https://trac.ffmpeg.org/wiki/Encode/AAC#fdk_cbr
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :param crf: Controls video quality. Higher is worse quality. must be between 28 and 51.
         :param qa: Audio bitrate in kbps. Lower is worse quality. Must be between 10 and 112.
         :mediaparam video: A video or gif.
@@ -413,7 +413,7 @@ class Media(commands.Cog, name="Editing"):
         An important reminder that by default tenor "gifs" are interpreted as mp4s,
         which do not suffer this problem.
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :param fps: Frames per second of the output. must be between 1 and 60.
         :mediaparam video: A video or gif.
         """
@@ -424,7 +424,7 @@ class Media(commands.Cog, name="Editing"):
         """
         Inverts colors of media
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :mediaparam video: A video or gif.
         """
         await process(ctx, processing.ffmpeg.invert, [["VIDEO", "GIF", "IMAGE"]])
@@ -435,7 +435,7 @@ class Media(commands.Cog, name="Editing"):
         """
         Trims media.
 
-        :param ctx: discord context
+        :param ctx: contexto de discord
         :param length: Length in seconds to trim the media to.
         :param start: Time in seconds to start the trimmed media at.
         :mediaparam media: A video, gif, or audio file.

@@ -11,13 +11,13 @@ class BotEventsCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        logger.log(35, f"Logged in as {self.bot.user.name}!")
-        logger.log(25, f"{len(self.bot.guilds)} guild(s)")
-        logger.log(25, f"{len(self.bot.shards)} shard(s)")
+        logger.log(35, f"logado como {self.bot.user.name}!")
+        logger.log(25, f"{len(self.bot.guilds)} Servidores")
+        logger.log(25, f"{len(self.bot.shards)} shards")
 
     @commands.Cog.listener()
     async def on_shard_connect(self, shardid):
-        logger.log(35, f"Shard {shardid} connected")
+        logger.log(35, f"Shard {shardid} Conectado")
 
     @commands.Cog.listener()
     async def on_disconnect(self):
@@ -25,7 +25,7 @@ class BotEventsCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_shard_disconnect(self, shardid):
-        logger.error(f"Shard {shardid} disconnected")
+        logger.error(f"Shard {shardid} Desconectado")
 
     @commands.Cog.listener()
     async def on_command(self, ctx: commands.Context):
@@ -35,14 +35,14 @@ class BotEventsCog(commands.Cog):
             command = ctx.message.content
         if isinstance(ctx.channel, discord.DMChannel):
             logger.log(25,
-                       f"@{ctx.message.author.name}#{ctx.message.author.discriminator} ({ctx.message.author.id}) ran "
-                       f"'{command}' in DMs")
+                       f"@{ctx.message.author.name}#{ctx.message.author.discriminator} ({ctx.message.author.id}) Corrido "
+                       f"'{command}' em mensagens diretas")
         else:
             logger.log(25,
                        f"@{ctx.message.author.name}#{ctx.message.author.discriminator}"
                        f" ({ctx.message.author.display_name}) ({ctx.message.author.id}) "
-                       f"ran '{command}' in channel "
-                       f"#{ctx.channel.name} ({ctx.channel.id}) in server {ctx.guild} ({ctx.guild.id})")
+                       f"executou '{command}' no canal "
+                       f"#{ctx.channel.name} ({ctx.channel.id}) no servidor {ctx.guild} ({ctx.guild.id})")
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
@@ -50,8 +50,8 @@ class BotEventsCog(commands.Cog):
             return
         if message.content.strip() in [f"<@{self.bot.user.id}>", f"<@!{self.bot.user.id}>"]:
             pfx = await prefix_function(self.bot, message, True)
-            await message.reply(f"My command prefix is `{pfx}`, or you can "
-                                f"mention me! Run `{pfx}help` for bot help.", delete_after=10,
+            await message.reply(f"Meu prefixo de comando é `{pfx}`, ou você pode "
+                                f"me mencione! Execute `{pfx}ajuda` para obter ajuda do bot.", delete_after=10,
                                 mention_author=False)
 
     @commands.Cog.listener()
@@ -61,14 +61,14 @@ class BotEventsCog(commands.Cog):
         else:
             command = ctx.message.content
         logger.log(35,
-                   f"Command '{command}' by "
+                   f"Comando '{command}' por "
                    f"@{ctx.message.author.name}#{ctx.message.author.discriminator} ({ctx.message.author.id}) "
-                   f"is complete!")
-    # command here
+                   f"está completo!")
+    # comando aqui
 
 
 '''
-Steps to convert:
+Passos para converter:
 @bot.command() -> @commands.hybrid_command()
 @bot.listen() -> @commands.Cog.listener()
 function(ctx, ...): -> function(self, ctx, ...)

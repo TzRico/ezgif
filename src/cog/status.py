@@ -18,12 +18,12 @@ class StatusCog(commands.Cog):
     async def changestatus(self):
         if datetime.datetime.now().month == 6:  # june (pride month)
             game = discord.Activity(
-                name=f"LGBTQ+ pride in {len(self.bot.guilds)} server{'' if len(self.bot.guilds) == 1 else 's'}! | "
+                name=f"Orgulho LGBTQ+ em {len(self.bot.guilds)} servidores{'' if len(self.bot.guilds) == 1 else 's'}! | "
                      f"{config.default_command_prefix}help",
                 type=discord.ActivityType.watching)
         else:
             game = discord.Activity(
-                name=f"with your media in {len(self.bot.guilds)} server{'' if len(self.bot.guilds) == 1 else 's'} | "
+                name=f"com sua mídia em {len(self.bot.guilds)} servidores{'' if len(self.bot.guilds) == 1 else 's'} | "
                      f"{config.default_command_prefix}help",
                 type=discord.ActivityType.playing)
         await self.bot.change_presence(activity=game)

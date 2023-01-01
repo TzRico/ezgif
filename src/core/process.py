@@ -19,20 +19,20 @@ import utils.tempfiles
 async def process(ctx: commands.Context, func: callable, inputs: list, *args,
                   resize=True, expectimage=True, uploadresult=True, queue=True, run_parallel=False, **kwargs):
     """
-    The core function of the bot. Gathers media and sends it to the proper function.
+    A função principal do bot. Reúne a mídia e a envia para a função apropriada.
 
-    :param ctx: discord context. media is gathered using imagesearch() with this.
-    :param func: function to process input media with
-    :param inputs: list of lists of strings. each inner list is an argument, the strings it contains are the
-        types that arg must be. or just False/[] if no media needed
-    :param args: any non-media arguments, passed into func()
-    :param resize: automatically up/downsize the inputs?
-    :param expectimage: is func() supposed to return a result? if true, it expects an image. if false, can use a
+    :param ctx: discord context. a mídia é coletada usando imagesearch() com this.
+    :param func: função para processar mídia de entrada com
+    :param inputs: lista de listas de strings. cada lista interna é um argumento, as strings que ela contém são os
+        tipos que arg deve ser. ou apenas False/[] se nenhuma mídia for necessária
+    :param args: quaisquer argumentos que não sejam de mídia, passados ​​para func ()
+    :param resize: automaticamente aumentar/diminuir o tamanho das entradas?
+    :param expectimage: func() deveria retornar um resultado? se verdadeiro, ele espera uma imagem. se falso, pode usar um
         string.
-    :param uploadresult: if true, uploads the result automatically.
-    :param queue: if true, command must wait for open slot in queue to process.
-    :param run_parallel: for sync functions only, run without blocking
-    :return: filename of processed media
+    :param uploadresult: se true, carrega o resultado automaticamente.
+    :param queue: se verdadeiro, o comando deve aguardar o slot aberto na fila para processar.
+    :param run_parallel: apenas para funções de sincronização, execute sem bloquear
+    :return: nome do arquivo da mídia processada
     """
 
     result = None
@@ -54,7 +54,7 @@ async def process(ctx: commands.Context, func: callable, inputs: list, *args,
 
     if inputs:
         # nothing to download sometimes
-        await updatestatus(f"Downloading...")
+        await updatestatus(f"Baixando...")
 
     try:
         async with utils.tempfiles.TempFileSession():
@@ -72,15 +72,15 @@ async def process(ctx: commands.Context, func: callable, inputs: list, *args,
                     if (imtype := await processing.ffprobe.mediatype(file)) not in inputs[i]:
                         # send message and break
                         await ctx.reply(
-                            f"{config.emojis['warning']} Media #{i + 1} is {imtype}, it must be: "
+                            f"{config.emojis['warning']} A mídia #{i + 1} é {imtype}, deve ser: "
                             f"{', '.join(inputs[i])}")
-                        logger.info(f"Media {i} type {imtype} is not in {inputs[i]}")
+                        logger.info(f"Mídia {i} tipo {imtype} não está em {inputs[i]}")
                         break
                     else:
                         # send warning for apng
                         if await processing.ffmpeg.is_apng(file):
                             asyncio.create_task(ctx.reply(f"{config.emojis['warning']} Media #{i + 1} is an apng, w"
-                                                          f"hich FFmpeg and MediaForge have limited support for. Ex"
+                                                          f"para o qual o FFmpeg e o Gifmaker têm suporte limitado. Ex"
                                                           f"pect errors.", delete_after=10))
                         # resize if needed
                         if resize:
@@ -89,14 +89,14 @@ async def process(ctx: commands.Context, func: callable, inputs: list, *args,
                 else:
                     # only update with queue message if there is a queue
                     if queue and v2queue.sem.locked():
-                        await updatestatus("Your command is in the queue...")
+                        await updatestatus("Seu comando está na fila...")
 
                     # run func
                     async def run():
                         nonlocal args
                         nonlocal files
-                        logger.info("Processing...")
-                        await updatestatus("Processing...")
+                        logger.info("Em processamento...")
+                        await updatestatus("Em processamento...")
                         # remove too long videossss
                         for i, f in enumerate(files):
                             files[i] = await processing.ffmpeg.ensureduration(f, ctx)
@@ -110,7 +110,7 @@ async def process(ctx: commands.Context, func: callable, inputs: list, *args,
                             if run_parallel:
                                 command_result = await processing.common.run_parallel(func, *args, **kwargs)
                             else:
-                                logger.warning(f"{func} is not coroutine")
+                                logger.warning(f"{func} não é corrotina")
                                 command_result = func(*args, **kwargs)
                         if expectimage and command_result:
                             mt = await processing.ffmpeg.mediatype(command_result)
@@ -128,17 +128,17 @@ async def process(ctx: commands.Context, func: callable, inputs: list, *args,
                     # check results are as expected
                     if expectimage:  # file expected
                         if not result:
-                            raise processing.common.ReturnedNothing(f"Expected image, {func} returned nothing.")
+                            raise processing.common.ReturnedNothing(f"Imagem esperada, {func} não retornou nada.")
                     else:  # status string expected
                         if not result:
-                            raise processing.common.ReturnedNothing(f"Expected string, {func} returned nothing.")
+                            raise processing.common.ReturnedNothing(f"String esperada, {func} não retornou nada.")
                         else:
                             await ctx.reply(result)
 
                     # if we need to upload image, do that
                     if result and expectimage:
-                        logger.info("Uploading...")
-                        await updatestatus("Uploading...")
+                        logger.info("Enviando...")
+                        await updatestatus("Enviando...")
                         if uploadresult:
                             if ctx.interaction:
                                 await msg.edit(content="", attachments=[discord.File(result)])
@@ -146,11 +146,11 @@ async def process(ctx: commands.Context, func: callable, inputs: list, *args,
                                 await ctx.reply(file=discord.File(result))
 
             else:  # no media found but media expected
-                logger.info("No media found.")
+                logger.info("Nenhuma mídia encontrada.")
                 if ctx.interaction:
-                    await msg.edit(content=f"{config.emojis['x']} No file found.")
+                    await msg.edit(content=f"{config.emojis['x']} Nenhum arquivo encontrado.")
                 else:
-                    await ctx.reply(f"{config.emojis['x']} No file found.")
+                    await ctx.reply(f"{config.emojis['x']} Nenhum arquivo encontrado.")
     except Exception as e:
         if msg is not None and not ctx.interaction:
             await msg.delete()

@@ -17,7 +17,7 @@ from utils.tempfiles import reserve_tempfile
 async def edit_msg_with_webhookmessage_polyfill(msg: typing.Union[discord.Message, discord.WebhookMessage],
                                                 delete_after=None, **kwargs):
     """
-    helper function to add `delete_after` support to WebhookMessage
+    função auxiliar para adicionar suporte `delete_after` a WebhookMessage
     """
     if isinstance(msg, discord.WebhookMessage):
         async def wait_and_delete(msg):

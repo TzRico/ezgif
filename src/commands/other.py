@@ -24,9 +24,9 @@ from utils.web import saveurls
 import utils.tempfiles
 
 
-class Other(commands.Cog, name="Other"):
+class Other(commands.Cog, name="Outro"):
     """
-    Commands that don't fit in the other categories.
+    Comandos que não se enquadram nas outras categorias.
     """
 
     def __init__(self, bot):
@@ -248,7 +248,7 @@ class Other(commands.Cog, name="Other"):
         # unspecified inquiry
         if inquiry is None:
             embed = discord.Embed(title="Help", color=discord.Color(0xB565D9),
-                                  description=f"Run `{prefix}help category` to list commands from "
+                                  description=f"Execute `{prefix}ajuda categoria` para listar comandos de "
                                               f"that category.")
             # for every cog
             for c in self.bot.cogs.values():

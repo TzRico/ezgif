@@ -33,24 +33,24 @@ emojis = {
     "x": "<:xmark:803792052932444180>",
     "warning": "<:wmark:803791399782580284>",
     "question": "<:qmark:803791399615070249>",
-    "exclamation_question": "<:eqmark:803791399501168641>",
-    "2exclamation": "<:eemark:803791399710883871>",
-    "working": "<a:working:803801825605320754>",
-    "clock": "<:clockmark:803803703169515541>",
-    "one": "<:one:826643438555758622>",
-    "two": "<:two:826643438421671987>",
+    "exclamation_question": "<:eqmark:1059039044954243162>",
+    "2exclamation": "<:eemark:1059039133340815420>",
+    "working": "<a:working:1059034942803300392>",
+    "clock": "<:clockmark:1059039207869395025>",
+    "one": "<:one:1059039312378863616>",
+    "two": "<:two:1059039470848065587>",
     "three": "<:three:826643438723923968>",
-    "resize": "<:resize:826643438354694165>",
+    "resize": "<:resize:1059039611961217116>",
     "check": "<:check:826643438652489778>"
 }
 # up to 25 tips that can show when using $help tips. type \n for a newline
 tips = {
-    "Media Searching": "MediaForge automatically searches for any media in a channel. Reply to a message with the "
-                       "command to search that message first.",
-    "File Formats": "MediaForge supports static image formats like PNG, animated image formats like GIF, and video "
-                    "formats like MP4.",
-    "Self-Hosting": "MediaForge is completely open source and anyone can host a clone "
-                    "themself!\nhttps://github.com/HexCodeFFF/mediaforge "
+    "Media Searching": "O Gifmaker procura automaticamente por qualquer mídia em um canal. Responder a uma mensagem com o "
+                       "comando para pesquisar essa mensagem primeiro.",
+    "File Formats": "O Gifmaker oferece suporte a formatos de imagem estática como PNG, formatos de imagem animada como GIF e vídeo "
+                    "formatos como MP4.",
+    "Self-Hosting": "Gifmaker é completamente open source e qualquer um pode hospedar um clone "
+                    "themself!\nhttps://github.com/Tzputao/gifmaker "
 }
 # https://www.reddit.com/r/discordapp/comments/aflp3p/the_truth_about_discord_file_upload_limits/
 # configured upload limit, in bytes, for files.
@@ -63,7 +63,7 @@ blocked_words = []
 # filename of the sqlite3 database. currently only used for storing server-specific prefixes.
 db_filename = "database.db"
 # default prefix for commands
-default_command_prefix = "$"
+default_command_prefix = "g!"
 # this url will be sent a periodic request. this is designed to be used with an uptime monitoring service
 heartbeaturl = None
 # how often (in seconds) to request the heartbeat url
