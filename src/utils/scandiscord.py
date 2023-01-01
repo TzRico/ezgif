@@ -1,5 +1,5 @@
 """
-Miscellaneous helper functions for commands
+Funções auxiliares diversas para comandos
 """
 
 import json

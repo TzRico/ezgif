@@ -24,7 +24,7 @@ def add_long_field(embed: discord.Embed, name: str, value: str) -> discord.Embed
 
 def showcog(cog):
     show_cog = False
-    # check if there are any non-hidden commands in the cog, if not, dont show it in the help menu.
+    # verifique se há algum comando não oculto na engrenagem, caso contrário, não o mostre no menu de ajuda.
     for com in cog.get_commands():
         if not com.hidden:
             show_cog = True

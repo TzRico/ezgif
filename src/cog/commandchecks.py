@@ -48,8 +48,8 @@ class CommandChecksCog(commands.Cog):
 
     # @commands.check
     async def cooldown_check(self, ctx):
-        # no cooldown for help
-        if ctx.command.name == "help":
+        # sem cooldown para ajuda
+        if ctx.command.name == "ajuda":
             return True
         # owner(s) are exempt from cooldown
         if await self.bot.is_owner(ctx.message.author):

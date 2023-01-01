@@ -43,7 +43,7 @@ emojis = {
     "resize": "<:resize:1059039611961217116>",
     "check": "<:check:826643438652489778>"
 }
-# up to 25 tips that can show when using $help tips. type \n for a newline
+# até 25 dicas que podem ser exibidas ao usar $ajuda tips. digite \n para uma nova linha
 tips = {
     "Media Searching": "O Gifmaker procura automaticamente por qualquer mídia em um canal. Responder a uma mensagem com o "
                        "comando para pesquisar essa mensagem primeiro.",

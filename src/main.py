@@ -179,7 +179,7 @@ if __name__ == "__main__":
     intents.members = False
     # init bot
     bot = MyBot(command_prefix=prefix_function,
-                help_command=None,
+                ajuda_command=None,
                 case_insensitive=True,
                 shard_count=shard_count,
                 guild_ready_timeout=30,

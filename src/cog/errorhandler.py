@@ -97,7 +97,7 @@ class ErrorHandlerCog(commands.Cog):
                     allcmds += botcom.aliases
             prefix = await prefix_function(self.bot, ctx.message, True)
             match = difflib.get_close_matches(cmd, allcmds, n=1, cutoff=0)[0]
-            err = f"{config.emojis['exclamation_question']} Command `{prefix}{cmd}` does not exist. " \
+            err = f"{config.emojis['exclamation_question']} O comando `{prefix}{cmd}` não existe. " \
                   f"Did you mean **{prefix}{match}**?"
             await logandreply(err)
             self.antispambucket[ctx.author.id] = now() + config.cooldown
@@ -117,7 +117,7 @@ class ErrorHandlerCog(commands.Cog):
             err = f"{config.emojis['warning']} {errorstring}"
             if ctx.command:
                 prefix = await prefix_function(self.bot, ctx.message, True)
-                err += f" Run `{prefix}help {ctx.command}` to see how to use this command."
+                err += f" Run `{prefix}ajuda {ctx.command}` to see how to use this command."
             await logandreply(err)
         elif isinstance(commanderror, discord.ext.commands.errors.NoPrivateMessage):
             err = f"{config.emojis['warning']} {errorstring}"

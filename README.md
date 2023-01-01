@@ -1,89 +1,71 @@
-# ![MediaForge](media/external/banner.png)
+### Um bot do Discord para editar e criar vídeos, imagens, GIFs e muito mais!
 
-[![MediaForge Discord](https://discordapp.com/api/guilds/803788965215338546/widget.png)](https://discord.gg/xwWjgyVqBz)
-[![Discord Bots](https://top.gg/api/widget/status/780570413767983122.svg)](https://top.gg/bot/780570413767983122)
-[![Discord Bots](https://top.gg/api/widget/servers/780570413767983122.svg)](https://top.gg/bot/780570413767983122)
-[![Discord Bots](https://top.gg/api/widget/upvotes/780570413767983122.svg)](https://top.gg/bot/780570413767983122/vote)
-[![uptime](https://app.statuscake.com/button/index.php?Track=6022597&Design=6)](https://uptime.statuscake.com/?TestID=JyWrfGfIjT)
+## informações técnicas gerais sobre o bot
 
-![Total Lines](https://img.shields.io/tokei/lines/github/HexCodeFFF/mediaforge)
-[![stars](https://img.shields.io/github/stars/HexCodeFFF/mediaforge?style=social)](https://github.com/HexCodeFFF/mediaforge/stargazers)
-[![built with immense swag](https://img.shields.io/static/v1?label=built+with&message=immense+swag&color=D262BA)](https://knowyourmeme.com/memes/trollface)
+- inspirado by [esmBot](https://github.com/esmBot/esmBot)
+- usa discord.py 2
+- usa libvips para legendagem
+- usa FFmpeg para processamento de mídia
 
-[//]: # (![discord.py]&#40;https://img.shields.io/github/pipenv/locked/dependency-version/HexCodeFFF/mediaforge/nextcord&#41;)
-
-[//]: # (![python]&#40;https://img.shields.io/github/pipenv/locked/python-version/HexCodeFFF/mediaforge&#41;)
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q75US4A)
-
-### A Discord bot for editing and creating videos, images, GIFs, and more!
-
-## general technical info about the bot
-
-- inspired by [esmBot](https://github.com/esmBot/esmBot)
-- uses discord.py 2
-- uses libvips for captioning
-- uses FFmpeg for media processing
-
-## self-host with docker
+## auto-hospedagem com docker
 
 ### to install
 
-All you need to install yourself is [Docker Desktop](https://docs.docker.com/get-docker/)
+Tudo o que você precisa para instalar você mesmo é [Docker Desktop](https://docs.docker.com/get-docker/)
 
-as of writing, a working docker copy of MediaForge takes up ~3.46GB. if this is a concern and you are using some of the
-apt libraries MediaForge does, see [to self-host natively](#to-self-host-natively)
+até o momento, uma cópia do docker de trabalho do Gifmaker ocupa ~ 3,46 GB. se isso é uma preocupação e você está usandoalguns dos
+bibliotecas apt MediaForge faz, veja [auto-hospedar nativamente](#to-self-host-natively)
 
-once that's installed, run these commands in your terminal of choice.
+depois de instalado, execute esses comandos no terminal de sua escolha.
 
 ```shell
-docker build -t melodyflorum/mediaforge https://github.com/HexCodeFFF/mediaforge.git
-docker run -it --cap-add SYS_NICE --shm-size 8G --name mediaforge melodyflorum/mediaforge
+docker build -t tzrico/gifmaker https://github.com/Tzputao/gifmaker.git
+docker run -it --cap-add SYS_NICE --shm-size 8G --name gifmaker tzrico/gifmaker
 ```
 
-on linux, you may need to run docker with `sudo`
+no linux, pode ser necessário executar o docker com `sudo`
 
-replace `8G` with how much free RAM your system has that you would like to give MediaForge (in gigabytes). At least `1G`
-is suggested. Making this too small can make commands fail due to not enough space, as the `/dev/shm` in-memory
-filesystem is, by default, MediaForge's sole temporary directory. Override the `override_temp_dir` option in `config.py`
-if you can't allocate enough memory.
+substitua `8G` por quanta RAM livre seu sistema tem que você gostaria de fornecer ao MediaForge (em gigabytes). No menos `1G`
+é sugerido. Tornar isso muito pequeno pode fazer com que os comandos falhem devido ao espaço insuficiente, pois o `/dev/shm` na memória
+sistema de arquivos é, por padrão, o único diretório temporário do MediaForge. Substitua a opção `override_temp_dir` em`config.py`
+se você não puder alocar memória suficiente.
 
-if the installation succeeded, you should be prompted with some options. you'll need to select "Edit Config". this will
-open a text editor within your terminal. the 2 required config settings to change for proper functionality are the
-discord and tenor tokens. be sure not to add or remove quotes. press `CTRL+S` to save and `CTRL+X` to exit.
+se a instalação for bem-sucedida, você deverá ser solicitado com algumas opções. você precisará selecionar "Editar configuração". Isso vai
+abra um editor de texto em seu terminal. as 2 definições de configuração necessárias para alterar a funcionalidade adequada são as
+fichas de discórdia e tenor. certifique-se de não adicionar ou remover aspas. pressione `CTRL+S` para salvar e `CTRL+X` para sair.
 
-if you don't want to use the built-in text editor, you can [get the example config from GitHub](config.example.py), hold
-down `CTRL+K` to clear the file and then use `CTRL+V` to paste in your config.
+se você não quiser usar o editor de texto embutido, você pode [obter a configuração de exemplo do GitHub](config.example.py), segure
+pressione `CTRL+K` para limpar o arquivo e use `CTRL+V` para colar sua configuração.
 
 ### to run
 
-run `docker ps -a` in your terminal to see the created docker image. your container should have a 12 character "ID",
-which you'll need to run it.
+execute `docker ps -a` em seu terminal para ver a imagem do docker criada. seu contêiner deve ter 12 caracteres"ID",
+que você precisará para executá-lo.
 
-run in your favorite terminal:
+execute no seu terminal favorito:
 
 ```shell
-docker start -ia mediaforge
+docker start -ia gifmaker
 ```
 
 ### to stop
 
-killing the terminal window/`CTRL+C` won't kill the bot, because docker runs in the background.
+matar a janela do terminal/`CTRL+C` não matará o bot, porque o docker é executado em segundo plano.
 
-to kill the bot, run
+para matar o bot, corra
 
 ```shell
-docker stop mediaforge
+docker stop gifmaker
 ```
 
-### to limit resource consumption
+### para limitar o consumo de recursos
 
-since docker is very containerized, you can easily limit the amount of resources it's allowed to consume.
+como o docker é muito conteinerizado, você pode facilmente limitar a quantidade de recursos que pode consumir.
 
-the main command to do this is [`docker update`](https://docs.docker.com/engine/reference/commandline/update/#usage),
-though most of these arguments can be passed verbatim to `docker run` during setup.
+o comando principal para fazer isso é [`docker update`](https://docs.docker.com/engine/reference/commandline/update/#usage),
+embora a maioria desses argumentos possa ser passada literalmente para `docker run` durante a configuração.
 
-the most useful options are `--memory` and `--cpus`.
+as opções mais úteis são `--memory` and `--cpus`.
 
 for example, this is (as of writing) what the official MediaForge bot uses:
 
@@ -91,30 +73,30 @@ for example, this is (as of writing) what the official MediaForge bot uses:
 docker update --memory 9000M --memory-swap -1 --cpus "3.9" mediaforge
 ```
 
-- `--memory 9000M`: this limits it to 9gb (9000mb) of physical memory
-- `--memory-swap -1`: this allows it to use as much swap memory as it wants (swap memory is temporarily storing memory
-  on disk)
-- `--cpus "3.9"`: the host server has 4 cores, so this allows it to use "3.9"/4 (97.5%) of the PC's CPU time.
+- `--memory 9000M`: isso limita a 9 gb (9000 mb) de memória física
+- `--memory-swap -1`: isso permite que ele use tanta memória de troca quanto quiser (a memória de troca é temporariamentearmazenar memória
+  no disco)
+- `--cpus "3.9"`: o servidor host tem 4 núcleos, então isso permite que ele use "3,9"/4 (97,5%) do tempo de CPU do PC.
 
-### Automode
+### Modo automático
 
-this is designed to work with hosting providers where terminal control is not possible. There are 3 arguments to this
-mode that can be set as
-docker [build arguments](https://docs.docker.com/engine/reference/commandline/build/#set-build-time-variables---build-arg)
-or [environment variables](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file)
+isso é projetado para funcionar com provedores de hospedagem onde o controle de terminal não é possível. Existem 3 argumentos para isso
+modo que pode ser definido como
+docker [bconstruir argumentos](https://docs.docker.com/engine/reference/commandline/build/#set-build-time-variables---build-arg)
+or [variáveis ​​ambientais](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file)
 .
-`AUTOMODE`: set to "ON" to enable automode
-`AUTOUPDATE`: set to "ON" to update code and packages every run
-`CONFIG`: base64 encoded version of your config file.
+`AUTOMODE`: definido como "ON" para habilitar o modo automático
+`AUTOUPDATE`: definido como "ON" para atualizar o código e os pacotes a cada execução
+`CONFIG`: versão codificada em base64 do seu arquivo de configuração.
 
-#### to encode base 64
+#### para codificar base 64
 
-##### on linux:
+##### no linux:
 
 - `base64 config.py` prints the output to terminal
 - `base64 config.py > config.txt` writes the output to `config.txt`
 
-##### with python:
+##### com píton:
 
 ```python
 import base64
@@ -127,78 +109,78 @@ with open("config.txt", "wb+") as f:
     f.write(out)
 ```
 
-## to self-host natively
+## auto-hospedar nativamente
 
-MediaForge is a complex application and manually installing all dependencies is a headache. for almost all use
-cases, [the docker distribution](#self-host-with-docker) is much better.
+O MediaForge é um aplicativo complexo e instalar manualmente todas as dependências é uma dor de cabeça. para quase todos os usos
+casos, [a distribuição do docker](#self-host-with-docker) é muito melhor.
 
 ### summary
 
-ensure your OS is one of the [supported OSes](#supported-oses), then install the [python libraries](#python-libraries)
-and the [non-python libraries](#non-python-libraries), set up the [config](#config), and [run](#to-run)
+certifique-se de que seu sistema operacional é um dos [sistemas operacionais suportados](#supported-oses), então instale o [bibliotecas python](#python-libraries)
+e a [bibliotecas não-python](#non-python-libraries), configurar o [config](#config), and [run](#to-run)
 
-### supported OSes
+### sistemas operacionais suportados
 
-built and tested on windows 10/11 and debian 10/buster (inside docker). these 2 OSes (and their successors) will
-continue to be officially supported.
+construído e testado em windows 10/11 e debian 10/buster (dentro do docker). esses 2 sistemas operacionais (e seus sucessores)will
+continuam a ser oficialmente apoiados.
 
-will _probably_ work on macos and other linux/unix distros if the below libraries are available but theyre untested and
-unsupported. just replace `apt-get` with your system's preferred package manager ([`brew`](https://brew.sh/) for macos)
+_provavelmente_ funcionará em macos e outras distribuições linux/unix se as bibliotecas abaixo estiverem disponíveis, mas sãonão testado e
+sem suporte. apenas substitua `apt-get` pelo gerenciador de pacotes preferido do seu sistema ([`brew`](https://brew.sh/) for macos)
 
-on Windows, color emojis won't work. no idea why, just is a windows pango bug.
+no Windows, os emojis coloridos não funcionam. não faço ideia do porquê, apenas é um bug do windows pango.
 
 ### python libraries
 
-- This project uses [`poetry`](https://python-poetry.org/), run `poetry install` to install the required dependencies.
-    - install poetry with `pip install poetry`
-    - part of [`pyvips`](https://pypi.org/project/pyvips/) is built from source on installation.
-        - on Windows this will require the MSVC compiler, which is an optional component
-          of [Visual Studio](https://visualstudio.microsoft.com/downloads/)
-        - on Linux this will require [`gcc`](https://packages.ubuntu.com/bionic/gcc), installable
-          by `sudo apt-get install gcc`
+- Este projeto usa [`poetry`](https://python-poetry.org/), run `poetry install` to install the required dependências.
+    - instalar poesia com `pip install poetry`
+    - parte de [`pyvips`](https://pypi.org/project/pyvips/) é construído a partir da fonte na instalação.
+        - no Windows, isso exigirá o compilador MSVC, que é um componente opcional
+          de [Visual Studio](https://visualstudio.microsoft.com/downloads/)
+        - no Linux, isso exigirá [`gcc`](https://packages.ubuntu.com/bionic/gcc), instalável
+          por `sudo apt-get install gcc`
 
-### non-python libraries
+### bibliotecas não-python
 
-the bot uses many external CLI programs for media processing.
+o bot usa muitos programas CLI externos para processamento de mídia.
 
-- FFmpeg - not included but [easily installable on windows and linux](https://ffmpeg.org/download.html)
-    - **If installing on linux, ensure that ffmpeg version >= 5**
-- libvips - installable on linux with `sudo apt-get install libvips-dev`
-  . [windows instructions here](https://www.libvips.org/install.html#installing-the-windows-binary)
-- ImageMagick - **not included** but [downloadable here](https://imagemagick.org/script/download.php)
+- FFmpeg - não incluído, mas [facilmente instalável em windows e linux](https://ffmpeg.org/download.html)
+    - **Se estiver instalando no Linux, certifique-se de que a versão do ffmpeg >= 5**
+- libvips -instalável no linux com `sudo apt-get install libvips-dev`
+  . [instruções do windows aqui](https://www.libvips.org/install.html#installing-the-windows-binary)
+- ImageMagick - **não incluso** mas [para download aqui](https://imagemagick.org/script/download.php)
 - TTS
-    - on linux, this uses [`mimic`](https://github.com/MycroftAI/mimic1). a pre-compiled binary is included.
-        - the male and female voices are downloaded from mimic's repo on bot start if they are not detected. if you want
-          to re-download for some reason, delete the 2 files ending in `.flitefox` in `tts/`
-    - on windows, [`powershell`](https://aka.ms/powershell) is used to
-      access [Windows's native TTS](https://docs.microsoft.com/en-us/uwp/api/windows.media.speechsynthesis.speechsynthesizer)
-      . Both are included in modern versions of Windows, but ensure powershell is in the system path.
-    - the "retro" voice uses [sam-cli](https://github.com/HexCodeFFF/sam-cli). it is included, but it
-      requires [node.js](https://nodejs.org/) to be installed and added to the system path
-        - pretty sure both the windows & linux installers add it to path on installation but cant hurt to check
+    - no linux, isso usa [`mimic`](https://github.com/MycroftAI/mimic1). um binário pré-compilado está incluído.
+        - as vozes masculina e feminina são baixadas do repositório do imitador na inicialização do bot, se não forem detectadas. Se você quiser
+          para baixar novamente por algum motivo, exclua os 2 arquivos que terminam em `.flitefox` in `tts/`
+    - no Windows, [`powershell`](https://aka.ms/powershell) é usado para
+      acessar [TTS nativo do Windows](https://docs.microsoft.com/en-us/uwp/api/windows.media.speechsynthesis.speechsynthesizer)
+      . Ambos estão incluídos nas versões modernas do Windows, mas certifique-se de que o powershell esteja no caminho do sistema.
+    - a voz "retro" usa [sam-cli](https://github.com/HexCodeFFF/sam-cli). está incluído, mas
+      requer [node.js](https://nodejs.org/) para ser instalado e adicionado ao caminho do sistema
+        - tenho certeza de que os instaladores do Windows e do Linux o adicionam ao caminho na instalação, mas não custa verificar
 
-### config
+### configuração
 
-- create a copy of [`config.example.py`](config.example.py) and name it `config.py`.
-- insert/change the appropriate config settings such as your discord api token. be sure not to add or remove quotes.
-- the 2 required config settings to change for proper functionality are the discord and tenor tokens.
+- crie uma cópia de [`config.example.py`](config.example.py) e nomeie-a `config.py`.
+- insira/altere as configurações apropriadas, como o token da API do Discord. certifique-se de não adicionar ou remover aspas.
+- as 2 configurações necessárias para alterar a funcionalidade adequada são os tokens de discórdia e tenor.
 
 ### python
 
-- developed and tested on python 3.11. use that or a later compatible version
+- desenvolvido e testado em python 3.11. use essa ou uma versão posterior compatível
 
-### to run
+### para correr
 
-- once you've set up all of the libraries, just run the program with `poetry run python src/main.py` (
-  or `poetry run python3.11 src/main.py` or whatever your python is named). make sure it can read and write to the
-  directory
-  it lives in and also access/execute all the aforementioned libraries
-    - if poetry isn't installing on the right python version, run `<yourpython> -m pip` instead of pip
+- depois de configurar todas as bibliotecas, basta executar o programa com `poetry run python src/main.py` (
+  ou `poetry run python3.11 src/main.py` ou qualquer que seja o nome do seu python). certifique-se de que ele pode ler e escrevera
+  diretório
+  reside e também acessa/executa todas as bibliotecas mencionadas
+    - se a poesia não estiver instalada na versão correta do python, execute `<yourpython> -m pip` em vez de pip
       and `<yourpython> -m poetry` instead of `poetry`
-- terminate the bot by running the `shutdown` command, this will _probably_ close better than a termination
+- encerre o bot executando o comando `shutdown`, isso _provavelmente_ fechará melhor do que um encerramento
 
-## legal stuff
+## coisas legais
 
-[terms of service](media/external/terms_of_service.md)
+[termos de serviço](media/external/terms_of_service.md)
 
-[privacy policy](media/external/privacy_policy.md)
+[política de Privacidade](media/external/privacy_policy.md)

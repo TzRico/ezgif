@@ -19,7 +19,7 @@ def get_caption_height(file, tolerance: float):
         px = im.getpoint(0, row)
         if mean([abs(target - bandval) for bandval in px]) > tolerance:
             return row + 1
-    raise NonBugError("Unable to detect caption. Try to adjust `frame_to_try`. Run `$help uncaption` for help.")
+    raise NonBugError("Unable to detect caption. Try to adjust `frame_to_try`. Run `$ajuda uncaption` for ajuda.")
 
 
 async def uncaption(file, frame_to_try: int, tolerance: float):

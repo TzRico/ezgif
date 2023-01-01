@@ -236,20 +236,20 @@ class Other(commands.Cog, name="Outro"):
             await ctx.reply("Output of `ffmpeg -version`", file=discord.File(buf, filename="ffmpegversion.txt"))
 
     @commands.hybrid_command()
-    async def help(self, ctx, *, inquiry: typing.Optional[str] = None):
+    async def ajuda(self, ctx, *, inquiry: typing.Optional[str] = None):
         """
-        Shows help on bot commands.
+        Mostra a ajuda nos comandos do bot.
 
         :param ctx: discord context
-        :param inquiry: the name of a command or command category. If none is provided, all categories are shown.
-        :return: the help text if found
+        :param inquiry: o nome de um comando ou categoria de comando. Se nenhum for fornecido, todas as categorias serão mostradas.
+        :return: o texto de ajuda se encontrado
         """
         prefix = await prefix_function(self.bot, ctx.message, True)
         # unspecified inquiry
         if inquiry is None:
-            embed = discord.Embed(title="Help", color=discord.Color(0xB565D9),
+            embed = discord.Embed(title="ajuda", color=discord.Color(0xB565D9),
                                   description=f"Execute `{prefix}ajuda categoria` para listar comandos de "
-                                              f"that category.")
+                                              f"uma categoria.")
             # for every cog
             for c in self.bot.cogs.values():
                 # if there is 1 or more non-hidden command
@@ -264,7 +264,7 @@ class Other(commands.Cog, name="Outro"):
             # get the cog found
             cog = coglist[inquiry.lower()]
             embed = discord.Embed(title=cog.qualified_name,
-                                  description=cog.description + f"\nRun `{prefix}help command` for "
+                                  description=cog.description + f"\nRun `{prefix}ajuda command` for "
                                                                 f"more information on a command.",
                                   color=discord.Color(0xD262BA))
             # add field with description for every command in the cog
@@ -301,9 +301,9 @@ class Other(commands.Cog, name="Outro"):
             embed = discord.Embed(title=prefix + cmd.name, description=cmd.cog_name,
                                   color=discord.Color(0xEE609C))
             # if command func has docstring
-            if cmd.help:
+            if cmd.ajuda:
                 # parse it
-                docstring = docstring_parser.parse(cmd.help, style=docstring_parser.DocstringStyle.REST)
+                docstring = docstring_parser.parse(cmd.ajuda, style=docstring_parser.DocstringStyle.REST)
                 # format short/long descriptions or say if there is none.
                 if docstring.short_description or docstring.long_description:
                     command_information = \
@@ -317,9 +317,9 @@ class Other(commands.Cog, name="Outro"):
                 # for every "clean paramater" (no self or ctx)
                 for param in list(cmd.clean_params.values()):
                     # get command description from docstring
-                    paramhelp = discord.utils.get(docstring.params, arg_name=param.name)
+                    paramajuda = discord.utils.get(docstring.params, arg_name=param.name)
                     # not found in docstring
-                    if paramhelp is None:
+                    if paramajuda is None:
                         paramtext.append(f"**{param.name}** - No description")
                         continue
                     # optional argument (param has a default value)
@@ -328,18 +328,18 @@ class Other(commands.Cog, name="Outro"):
                     else:
                         pend = ""
                     # format and add to paramtext list
-                    paramhelp.description = paramhelp.description.replace('\n', ' ')
+                    paramajuda.description = paramajuda.description.replace('\n', ' ')
                     paramtext.append(f"**{param.name}** - "
-                                     f"{paramhelp.description if paramhelp.description else 'No description'}"
+                                     f"{paramajuda.description if paramajuda.description else 'No description'}"
                                      f"{pend}")
                 mediaparamtext = []
-                for mediaparam in re.finditer(re.compile(":mediaparam ([^ :]+): ([^\n]+)"), cmd.help):
+                for mediaparam in re.finditer(re.compile(":mediaparam ([^ :]+): ([^\n]+)"), cmd.ajuda):
                     argname = mediaparam[1]
                     argdesc = mediaparam[2]
                     mediaparamtext.append(f"**{argname}** - {argdesc}")
                 # if there are params found
                 if len(paramtext):
-                    # join list and add to help
+                    # entrar na lista e adicionar para ajudar
                     embed = add_long_field(embed, "Parameters", "\n".join(paramtext))
                 if len(mediaparamtext):
                     mval = "*Media parameters are automatically collected from the channel.*\n" + \

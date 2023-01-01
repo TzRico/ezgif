@@ -19,12 +19,12 @@ class StatusCog(commands.Cog):
         if datetime.datetime.now().month == 6:  # june (pride month)
             game = discord.Activity(
                 name=f"Orgulho LGBTQ+ em {len(self.bot.guilds)} servidores{'' if len(self.bot.guilds) == 1 else 's'}! | "
-                     f"{config.default_command_prefix}help",
+                     f"{config.default_command_prefix}ajuda",
                 type=discord.ActivityType.watching)
         else:
             game = discord.Activity(
-                name=f"com sua mídia em {len(self.bot.guilds)} servidores{'' if len(self.bot.guilds) == 1 else 's'} | "
-                     f"{config.default_command_prefix}help",
+                name=f"criando e editando mídias em {len(self.bot.guilds)} servidores{'' if len(self.bot.guilds) == 1 else 's'} | "
+                     f"{config.default_command_prefix}ajuda",
                 type=discord.ActivityType.playing)
         await self.bot.change_presence(activity=game)
 
