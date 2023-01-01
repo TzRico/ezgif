@@ -1,5 +1,5 @@
 """
-The entrypoint of MediaForge, containing the majority of the discord API interactions.
+O ponto de entrada do Ezgif, contendo a maioria das interações da API do Discord.
 """
 import asyncio
 # standard libs
@@ -34,8 +34,8 @@ try:
     pickling_support.install()
 except ModuleNotFoundError as e:
     print("".join(traceback.format_exception(type(e), e, tb=e.__traceback__)), file=sys.stderr)
-    sys.exit("MediaForge was unable to import the required libraries and files. Did you follow the self-hosting guide "
-             "on the GitHub? https://github.com/HexCodeFFF/mediaforge#to-self-host")
+    sys.exit("O Ezgif não conseguiu importar as bibliotecas e arquivos necessários. Você seguiu o guia de auto-hospedagem "
+             "no GitHub? https://github.com/Tzputao/ezgif#to-self-host")
 
 # project files
 import core.database
@@ -60,8 +60,8 @@ from commands.other import Other
 
 docker = os.environ.get('AM_I_IN_A_DOCKER_CONTAINER', False)
 if not hasattr(config, "bot_token") or config.bot_token == "EXAMPLE_TOKEN":
-    sys.exit("The bot token could not be found or hasn't been properly set. Be sure to follow the self-hosting "
-             "guide on GitHub. https://github.com/HexCodeFFF/mediaforge#to-self-host")
+    sys.exit("O token do bot não foi encontrado ou não foi definido corretamente. Certifique-se de seguir a auto-hospedagem "
+             "guia no GitHub. https://github.com/Tzputao/ezgif#to-self-host")
 
 # make copy of .reply() function
 discord.Message.orig_reply = discord.Message.reply
@@ -79,8 +79,8 @@ async def safe_reply(self: discord.Message, *args, **kwargs) -> discord.Message:
     # if its unrelated httpexception itll just throw again and fall to the
     # error handler hopefully
     except (discord.errors.NotFound, discord.errors.HTTPException) as e:
-        logger.debug(f"abandoning reply to {self.id} due to {get_full_class_name(e)}, "
-                     f"sending message in {self.channel.id}.")
+        logger.debug(f"abandonando a resposta a {self.id} devido a {get_full_class_name(e)}, "
+                     f"enviando mensagem em {self.channel.id}.")
         # mention author
         author = self.author.mention
         if len(args):
@@ -102,15 +102,15 @@ def downloadttsvoices():
         femalevoice = os.path.join(ttspath, "mycroft_voice_4.0.flitevox")
         malevoice = os.path.join(ttspath, "cmu_us_slt.flitevox")
         if not os.path.isfile(malevoice):
-            logger.log(25, "Downloading male TTS voice...")
+            logger.log(25, "Baixando voz masculina TTS...")
             download_sync("https://github.com/MycroftAI/mimic1/raw/development/voices/mycroft_voice_4.0.flitevox",
                           malevoice)
-            logger.log(35, "Male TTS voice downloaded!")
+            logger.log(35, "Download de voz masculina TTS!")
         if not os.path.isfile(femalevoice):
-            logger.log(25, "Downloading female TTS voice...")
+            logger.log(25, "Baixando voz TTS feminina...")
             download_sync("https://github.com/MycroftAI/mimic1/raw/development/voices/cmu_us_slt.flitevox",
                           femalevoice)
-            logger.log(35, "Female TTS voice downloaded!")
+            logger.log(35, "Download de voz feminina TTS!")
         # chmod +x (mark executable)
         mimicpath = os.path.join(ttspath, "mimic")
         os.chmod(mimicpath, os.stat(mimicpath).st_mode | 0o111)
@@ -143,13 +143,13 @@ def init():
 
 class MyBot(commands.AutoShardedBot):
     async def setup_hook(self):
-        logger.debug(f"initializing cogs")
+        logger.debug(f"inicializando engrenagens")
         await core.database.init_database()
         if config.bot_list_data:
-            logger.info("bot list data found. botblock will start when bot is ready.")
+            logger.info("dados da lista de bots encontrados. botblock iniciará quando o bot estiver pronto.")
             await bot.add_cog(DiscordListsPost(bot))
         else:
-            logger.debug("no bot list data found")
+            logger.debug("nenhum dado da lista de bots encontrado")
         await asyncio.gather(
             bot.add_cog(Caption(bot)),
             bot.add_cog(Media(bot)),
@@ -166,7 +166,7 @@ class MyBot(commands.AutoShardedBot):
 
 
 if __name__ == "__main__":
-    logger.log(25, "Hello World!")
+    logger.log(25, "Olá Mundo!")
     logger.info(f"discord.py {discord.__version__}")
     init()
     if hasattr(config, "shard_count") and config.shard_count is not None:

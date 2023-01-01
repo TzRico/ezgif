@@ -69,7 +69,7 @@ MediaForge is a general purpose media editing tool mainly for meme creation, ins
 - **$addemoji**: Adds a file as an emoji to a server. Both MediaForge and the command caller must have the Manage Emojis permission.
 - **$attributions**: Lists most libraries and programs this bot uses.
 - **$feedback**: Give feedback for the bot.
-- **$help**: Shows the help message.
+- **$ajuda**: Mostra a mensagem de ajuda.
 - **$info**: Provides info on a media file.
 - **$ping**: Pong!
 - **$setbanner**: Sets a file as the server banner.

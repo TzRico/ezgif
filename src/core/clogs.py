@@ -1,4 +1,4 @@
-# configure logging https://coloredlogs.readthedocs.io/en/latest/api.html#id28
+# configurar registro https://coloredlogs.readthedocs.io/en/latest/api.html#id28
 import logging
 
 import coloredlogs

@@ -19,7 +19,7 @@ class MyLogger(object):
 
 
 def ytdownload(vid, form):
-    # file extension is unknown so we have to do it weirdly
+    # a extensão do arquivo é desconhecida, então temos que fazer isso estranhamente
     while True:
         name = f"{utils.tempfiles.temp_dir}/{utils.tempfiles.get_random_string(12)}"
         if len(glob.glob(name + ".*")) == 0:
@@ -32,7 +32,7 @@ def ytdownload(vid, form):
         "format": f'(bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/bestvideo+bestaudio/best)'
                   f'[filesize<?{config.file_upload_limit}]',
         "max_filesize": config.file_upload_limit,
-        "logger": MyLogger(),  # this is stupid but its how ytdl works
+        "logger": MyLogger(),  # isso é estúpido, mas é como o ytdl funciona
     }
     if form == "audio":
         opts['format'] = f"bestaudio[filesize<{config.file_upload_limit}]"
@@ -41,11 +41,11 @@ def ytdownload(vid, form):
             'preferredcodec': 'mp3',
         }]
     with youtube_dl.YoutubeDL(opts) as ydl:
-        # manually exclude livestreams, cant find a better way to do this ¯\_(ツ)_/¯
+        # excluir transmissões ao vivo manualmente, não consigo encontrar uma maneira melhor de fazer isso ¯\_(ツ)_/¯
         nfo = ydl.extract_info(vid, download=False)
         logger.debug(nfo)
         if "is_live" in nfo and nfo["is_live"]:
-            raise youtube_dl.DownloadError("Livestreams cannot be downloaded.")
+            raise youtube_dl.DownloadError("As transmissões ao vivo não podem ser baixadas.")
         ydl.download([vid])
     filename = glob.glob(name + ".*")
     if len(filename) > 0:

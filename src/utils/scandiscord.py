@@ -18,9 +18,9 @@ tenor_url_regex = re.compile(r"https?://tenor\.com/view/([\w\d]+-)*(\d+)/?")
 
 async def handlemessagesave(m: discord.Message):
     """
-    handles saving of media from discord messages
-    :param m: a discord message
-    :return: list of file URLs detected in the message
+    lida com o salvamento de mídia de mensagens do discord
+    :param m: a discord mensagem
+    :return: lista de URLs de arquivos detectados na mensagem
     """
     # weird half-message thing that starts threads, get the actual parent message
     if m.type == discord.MessageType.thread_starter_message:
@@ -48,7 +48,7 @@ async def handlemessagesave(m: discord.Message):
             if sticker.format != discord.StickerFormatType.lottie:
                 detectedfiles.append(str(sticker.url))
             else:
-                logger.info("lottie sticker ignored.")
+                logger.info("adesivo lottie ignorado.")
             # this is commented out due to the lottie render code being buggy
             # if sticker.format == discord.StickerType.lottie:
             #     detectedfiles.append("LOTTIE|" + lottiestickers.stickerurl(sticker))
@@ -57,10 +57,10 @@ async def handlemessagesave(m: discord.Message):
 
 async def imagesearch(ctx, nargs=1):
     """
-    searches the channel for nargs media
-    :param ctx: command context
-    :param nargs: amount of media to return
-    :return: False if none or not enough media found, list of file paths if found
+    pesquisa o canal por nargs media
+    :param ctx: contexto de comando
+    :param nargs: quantidade de mídia para retornar
+    :return: Falso se nenhuma ou mídia insuficiente for encontrada, lista de caminhos de arquivo, se encontrada
     """
     messageschecked = []
     outfiles = []
@@ -92,11 +92,11 @@ async def imagesearch(ctx, nargs=1):
 
 async def handletenor(m: discord.Message, ctx: commands.Context, gif=False):
     """
-    like handlemessagesave() but only for tenor
-    :param m: discord message
-    :param ctx: command context
-    :param gif: return GIF url if true, mp4 url if false
-    :return: raw tenor media url
+    gosta handlemessagesave() mas apenas para tenor
+    :param m: discord mensagem
+    :param ctx: contexto de comando
+    :param gif: retorna URL do GIF se for verdadeiro, url do mp4 se for falso
+    :return: url de mídia tenor bruto
     """
     if len(m.embeds):
         if m.embeds[0].type == "gifv":
@@ -119,9 +119,9 @@ async def handletenor(m: discord.Message, ctx: commands.Context, gif=False):
 async def tenorsearch(ctx, gif=False):
     # currently only used for 1 command, might have future uses?
     """
-    like imagesearch() but for tenor
-    :param ctx: discord context
-    :param gif: return GIF url if true, mp4 url if false
+    como imagesearch (), mas para teor
+    :param ctx: discord contexto
+    :param gif: retorna URL do GIF se for verdadeiro, url do mp4 se for falso
     :return:
     """
     if ctx.message.reference:

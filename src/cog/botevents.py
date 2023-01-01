@@ -51,7 +51,7 @@ class BotEventsCog(commands.Cog):
         if message.content.strip() in [f"<@{self.bot.user.id}>", f"<@!{self.bot.user.id}>"]:
             pfx = await prefix_function(self.bot, message, True)
             await message.reply(f"Meu prefixo de comando é `{pfx}`, ou você pode "
-                                f"me mencione! Execute `{pfx}ajuda` para obter ajuda do bot.", delete_after=10,
+                                f"me mencionar! Execute `{pfx}ajuda` para obter ajuda do bot.", delete_after=10,
                                 mention_author=False)
 
     @commands.Cog.listener()

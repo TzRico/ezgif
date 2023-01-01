@@ -12,32 +12,32 @@ from utils.tempfiles import reserve_tempfile
 
 
 class NonBugError(Exception):
-    """When this is raised instead of a normal Exception, on_command_error() will not attach a traceback or github
+    """Quando isso é gerado em vez de uma exceção normal, on_command_error() não anexará um traceback ou github
     link. """
     pass
 
 
 class CMDError(Exception):
-    """raised by run_command"""
+    """criado por run_command"""
     pass
 
 
 class ReturnedNothing(Exception):
-    """raised by process()"""
+    """criado por process()"""
     pass
 
 
 # https://fredrikaverpil.github.io/2017/06/20/async-and-await-with-subprocesses/
 async def run_command(*args: str):
     """
-    run a cli command
+    executar um comando cli
 
-    :param args: the args of the command, what would normally be seperated by a space
-    :return: the result of the command
+    :param args: os args do comando, o que normalmente seria separado por um espaço
+    :return: o resultado do comando
     """
 
     # https://stackoverflow.com/a/56884806/9044183
-    # set proccess priority low
+    # definir baixa prioridade do processo
     if sys.platform == "win32":
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.BELOW_NORMAL_PRIORITY_CLASS
@@ -45,37 +45,37 @@ async def run_command(*args: str):
     else:
         nicekwargs = {"preexec_fn": lambda: os.nice(10)}
 
-    # Create subprocess
+    # Criar subprocesso
     process = await asyncio.create_subprocess_exec(
         *args, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
         **nicekwargs
     )
 
     # Status
-    logger.info(f"'{args[0]}' started with PID {process.pid}")
+    logger.info(f"'{args[0]}' começou com PID {process.pid}")
     logger.debug(f"PID {process.pid}: {args}")
 
-    # Wait for the subprocess to finish
+    # Aguarde a conclusão do subprocesso
     stdout, stderr = await process.communicate()
 
     try:
         result = stdout.decode().strip() + stderr.decode().strip()
     except UnicodeDecodeError:
         result = stdout.decode("ascii", 'ignore').strip() + stderr.decode("ascii", 'ignore').strip()
-    # Progress
+    # Progresso
     if process.returncode == 0:
         logger.debug(f"PID {process.pid} Done.")
-        logger.debug(f"Results: {result}")
+        logger.debug(f"Resultados: {result}")
     else:
 
         logger.error(
-            f"PID {process.pid} Failed: {args} result: {result}",
+            f"PID {process.pid} Fracassado: {args} resultado: {result}",
         )
-        # adds command output to traceback
-        raise CMDError(f"Command {args} failed.") from CMDError(result)
-    # Result
+        # adiciona saída de comando ao traceback
+        raise CMDError(f"Comando {args} fracassado.") from CMDError(result)
+    # Resultado
 
-    # Return stdout
+    # Retornar stdout
     return result
 
 
@@ -84,7 +84,7 @@ async def tts(text: str, model: typing.Literal["male", "female", "retro"] = "mal
     if model == "retro":
         await run_command("node", "tts/sam.js", "--moderncmu", "--wav", ttswav, text)
     else:
-        # espeak is a fucking nightmare on windows and windows has good native tts anyways sooooo
+        # espeak é a porra de um pesadelo no windows e windows tem bons tts nativos de qualquer maneira muuuuito
         if sys.platform == "win32":
             # https://docs.microsoft.com/en-us/dotnet/api/system.speech.synthesis.voicegender?view=netframework-4.8
             voice = str({"male": 1, "female": 2}[model])
@@ -110,12 +110,12 @@ def handle_tfs_parallel(func: typing.Callable, *args, **kwargs):
 
 async def run_parallel(syncfunc: typing.Callable, *args, **kwargs):
     """
-    uses concurrent.futures.ProcessPoolExecutor to run CPU-bound functions in their own process
+    usa concurrent.futures.ProcessPoolExecutor para executar funções vinculadas à CPU em seu próprio processo
 
-    :param syncfunc: the blocking function
-    :return: the result of the blocking function
+    :param syncfunc: a função de bloqueio
+    :return: o resultado da função de bloqueio
     """
-    # creating a new process pool doesnt appear to have much overhead but re-using an existing one causes PAin
+    # criar um novo pool de processos não parece ter muita sobrecarga, mas reutilizar um já existente causa PAin
     with concurrent.futures.ProcessPoolExecutor(1) as pool:
         success, res, files = await asyncio.get_running_loop().run_in_executor(
             pool, functools.partial(handle_tfs_parallel, syncfunc, *args, **kwargs)

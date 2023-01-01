@@ -20,40 +20,40 @@ async def count_emoji(guild: discord.Guild):
 
 async def add_emoji(file, guild: discord.Guild, name):
     """
-    adds emoji to guild
-    :param file: emoji to add
-    :param guild: guild to add it to
-    :param name: emoji name
-    :return: result text
+    adiciona emoji ao servidor
+    :param file: emoji para adicionar
+    :param guild: Servidor para adicioná-lo
+    :param name: nome do emoji
+    :return: texto do resultado
     """
     with open(file, "rb") as f:
         data = f.read()
     try:
         emoji = await guild.create_custom_emoji(name=name, image=data, reason="$addemoji command")
     except discord.Forbidden:
-        return f"{config.emojis['x']} I don't have permission to create an emoji. Make sure I have the Manage Emojis " \
-               f"permission. "
+        return f"{config.emojis['x']} Não tenho permissão para criar um emoji. Certifique-se de que eu tenho o Manage Emojis " \
+               f"Permissão. "
     except discord.HTTPException as e:
         logger.error(e, exc_info=(type(e), e, e.__traceback__))
-        return f"{config.emojis['2exclamation']} Something went wrong trying to add your emoji! ```{e}```"
+        return f"{config.emojis['2exclamation']} Algo deu errado ao tentar adicionar seu emoji! ```{e}```"
     else:
         count = await count_emoji(guild)
         if emoji.animated:
-            return f"{config.emojis['check']} Animated emoji successfully added: " \
-                   f"{emoji}\n{guild.emoji_limit - count['animated']} slots are left."
+            return f"{config.emojis['check']} Emoji animado adicionado com sucesso: " \
+                   f"{emoji}\n{guild.emoji_limit - count['animated']} sobraram slots."
         else:
-            return f"{config.emojis['check']} Emoji successfully added: " \
-                   f"{emoji}\n{guild.emoji_limit - count['static']} slots are left."
+            return f"{config.emojis['check']} Emoji adicionado com sucesso: " \
+                   f"{emoji}\n{guild.emoji_limit - count['static']} sobraram slots."
 
 
 async def add_sticker(file, guild: discord.Guild, sticker_emoji, name):
     """
-    adds sticker to guild
-    :param file: sticker to add
-    :param guild: guild to add it to
-    :param sticker_emoji "related" emoji of the sticker
-    :param name: sticker name
-    :return: result text
+    adiciona adesivo ao servidor
+    :param file: adesivo para adicionar
+    :param guild: Servidor para adicioná-lo
+    :param sticker_emoji "related" emoji do adesivo
+    :param name: nome do adesivo
+    :return: texto do resultado
     """
     size = os.path.getsize(file)
     file = discord.File(file)
@@ -62,27 +62,27 @@ async def add_sticker(file, guild: discord.Guild, sticker_emoji, name):
                                    description=" ")
         # description MUST NOT be empty. see https://github.com/nextcord/nextcord/issues/165
     except discord.Forbidden:
-        return f"{config.emojis['x']} I don't have permission to create a sticker. Make sure I have the Manage " \
-               f"Emojis and Stickers permission. "
+        return f"{config.emojis['x']} Não tenho permissão para criar um adesivo. Verifique se eu tenho o Gerenciar " \
+               f"Permissão de Emojis e Adesivos. "
     except discord.HTTPException as e:
         logger.error(e, exc_info=(type(e), e, e.__traceback__))
-        toreturn = f"{config.emojis['2exclamation']} Something went wrong trying to add your sticker! ```{e}```"
+        toreturn = f"{config.emojis['2exclamation']} Algo deu errado ao tentar adicionar seu adesivo! ```{e}```"
         if "Invalid Asset" in str(e):
-            toreturn += "\nNote: `Invalid Asset` means Discord does not accept this file format. Stickers are only " \
-                        "allowed to be png or apng."
-        if "Asset exceeds maximum size" in str(e):
-            toreturn += f"\nNote: Stickers must be under ~500kb. Your sticker is {humanize.naturalsize(size)}"
+            toreturn += "\nNota: `Invalid Asset` significa que o Discord não aceita este formato de arquivo. Os adesivos são apenas " \
+                        "permitido ser png ou apng."
+        if "O recurso excede o tamanho máximo" in str(e):
+            toreturn += f"\nNota: Os adesivos devem ter menos de ~500kb. seu adesivo é {humanize.naturalsize(size)}"
         return toreturn
     else:
-        return f"{config.emojis['check']} Sticker successfully added.\n" \
-               f"\n{guild.sticker_limit - len(guild.stickers)} slots are left."
+        return f"{config.emojis['check']} Adesivo adicionado com sucesso.\n" \
+               f"\n{guild.sticker_limit - len(guild.stickers)} sobraram slots."
 
 
 async def set_banner(file, guild: discord.Guild):
     """
-    sets guild banner
-    :param file: banner file
-    :param guild: guild to add it to
+    define o banner do servidor
+    :param file: arquivo de banner
+    :param guild: Servidor para adicioná-lo
     :return:
     """
     with open(file, "rb") as f:
@@ -90,34 +90,34 @@ async def set_banner(file, guild: discord.Guild):
     try:
         await guild.edit(banner=bytes(data))
     except discord.Forbidden:
-        return f"{config.emojis['x']} I don't have permission to set your banner. Make sure I have the Manage Server " \
+        return f"{config.emojis['x']} Não tenho permissão para definir seu banner. Certifique-se de que tenho a permissão de gerenciar Servidor " \
                f"permission. "
     except discord.HTTPException as e:
-        return f"{config.emojis['2exclamation']} Something went wrong trying to set your banner! ```{e}```"
+        return f"{config.emojis['2exclamation']} Algo deu errado ao tentar definir seu banner! ```{e}```"
     else:
-        return f"{config.emojis['check']} Successfully changed guild banner."
+        return f"{config.emojis['check']} Estandarte do servidor alterado com sucesso."
 
 
 async def set_icon(file, guild: discord.Guild):
     """
-    sets guild icon
-    :param file: icon file
-    :param guild: guild to add it to
+    define o ícone do servidor
+    :param file: arquivo de ícone
+    :param guild: Servidor para adicioná-lo
     :return:
     """
     if (await mediatype(file)) == "GIF" and "ANIMATED_ICON" not in guild.features:
-        return f"{config.emojis['x']} This guild does not support animated icons."
+        return f"{config.emojis['x']} Este servidor não suporta ícones animados."
     with open(file, "rb") as f:
         data = f.read()
     try:
         await guild.edit(icon=bytes(data))
     except discord.Forbidden:
-        return f"{config.emojis['x']} I don't have permission to set your icon. Make sure I have the Manage Server " \
+        return f"{config.emojis['x']} Não tenho permissão para definir seu ícone. Certifique-se de que tenho a permissão de gerenciar servidor " \
                f"permission. "
     except discord.HTTPException as e:
-        return f"{config.emojis['2exclamation']} Something went wrong trying to set your icon! ```{e}```"
+        return f"{config.emojis['2exclamation']} Algo deu errado ao tentar definir seu ícone! ```{e}```"
     else:
-        return "Successfully changed guild icon."
+        return "Ícone do servidor alterado com sucesso."
 
 
 async def iconfromsnowflakeid(snowflake: int, bot, ctx):

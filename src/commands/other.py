@@ -24,7 +24,7 @@ from utils.web import saveurls
 import utils.tempfiles
 
 
-class Other(commands.Cog, name="Outro"):
+class Other(commands.Cog, name="<:setared:1059251849791803443>Outro"):
     """
     Comandos que não se enquadram nas outras categorias.
     """
@@ -143,7 +143,7 @@ class Other(commands.Cog, name="Outro"):
 
         :param ctx: discord context
         """
-        embed = discord.Embed(color=discord.Color(0xD262BA), title="Statistics")
+        embed = discord.Embed(color=discord.Color(0xe74c3c), title="Statistics")
         embed.add_field(name="Queued Tasks", value=f"{core.v2queue.queued}")
         embed.add_field(name="Number of tasks this instance can run at once", value=f"{core.v2queue.workers}")
         if isinstance(self.bot, discord.AutoShardedClient):
@@ -157,7 +157,7 @@ class Other(commands.Cog, name="Outro"):
 
         :param ctx: discord context
         """
-        embed = discord.Embed(color=discord.Color(0xD262BA), title="Shards",
+        embed = discord.Embed(color=discord.Color(0xe74c3c), title="Shards",
                               description="Each shard is a separate connection to Discord that handles a fraction "
                                           "of all servers MediaForge is in.")
         for i, shard in self.bot.shards.items():
@@ -172,7 +172,7 @@ class Other(commands.Cog, name="Outro"):
 
         :param ctx: discord context
         """
-        embed = discord.Embed(color=discord.Color(0xD262BA), title="MediaForge")
+        embed = discord.Embed(color=discord.Color(0xe74c3c), title="MediaForge")
         embed.add_field(name="Official MediaForge Discord Server", value=f"https://discord.gg/xwWjgyVqBz")
         embed.add_field(name="top.gg link", value=f"https://top.gg/bot/780570413767983122")
         embed.add_field(name="Vote for MediaForge on top.gg", value=f"https://top.gg/bot/780570413767983122/vote")
@@ -189,7 +189,7 @@ class Other(commands.Cog, name="Outro"):
 
         :param ctx: discord context
         """
-        embed = discord.Embed(color=discord.Color(0xD262BA), title="Privacy Policy")
+        embed = discord.Embed(color=discord.Color(0xe74c3c), title="Privacy Policy")
         embed.add_field(name="What MediaForge Collects",
                         value=f"MediaForge has a sqlite database with the **sole purpose** of storing "
                               f"guild-specific command prefixes. **All** other data is *always* deleted when it is "
@@ -247,8 +247,9 @@ class Other(commands.Cog, name="Outro"):
         prefix = await prefix_function(self.bot, ctx.message, True)
         # unspecified inquiry
         if inquiry is None:
-            embed = discord.Embed(title="ajuda", color=discord.Color(0xB565D9),
-                                  description=f"Execute `{prefix}ajuda categoria` para listar comandos de "
+            embed = discord.Embed(title="<a:e_fogoVermelho:767757751346397194> ajuda", color=discord.Color(0xe74c3c),
+            embed.set_footer(name="Desenvolvido por Tz#0001")
+                                  description=f"Execute `{prefix}ajuda <categoria>` para listar comandos de "
                                               f"uma categoria.")
             # for every cog
             for c in self.bot.cogs.values():
@@ -266,7 +267,7 @@ class Other(commands.Cog, name="Outro"):
             embed = discord.Embed(title=cog.qualified_name,
                                   description=cog.description + f"\nRun `{prefix}ajuda command` for "
                                                                 f"more information on a command.",
-                                  color=discord.Color(0xD262BA))
+                                  color=discord.Color(0xe74c3c))
             # add field with description for every command in the cog
             for cmd in sorted(cog.get_commands(), key=lambda x: x.name):
                 if not cmd.hidden:
@@ -299,7 +300,7 @@ class Other(commands.Cog, name="Outro"):
                     f"Did you mean `{match}`?")
                 # past this assume cmd is defined
             embed = discord.Embed(title=prefix + cmd.name, description=cmd.cog_name,
-                                  color=discord.Color(0xEE609C))
+                                  color=discord.Color(0xe74c3c))
             # if command func has docstring
             if cmd.ajuda:
                 # parse it
@@ -388,7 +389,7 @@ class Other(commands.Cog, name="Outro"):
         embed = discord.Embed(title="Feedback",
                               description="Feedatabase.dback is best given via the GitHub repo, various "
                                           "links are provided below.",
-                              color=discord.Color(0xD262BA))
+                              color=discord.Color(0xe74c3c))
         embed.add_field(name="Report a bug",
                         value="To report a bug, make an issue at\nhttps://github.com/HexCodeFFF/mediaforge/issues",
                         inline=False)

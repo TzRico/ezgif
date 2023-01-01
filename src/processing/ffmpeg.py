@@ -770,17 +770,17 @@ def nthroot(num: float, n: float):
 
 def expanded_atempo(arg: float):
     """
-    expand atempo's limits from [0.5, 100] to (0, infinity) using daisy chaining
+    expanda os limites do atempo de [0,5, 100] para (0, infinito) usando encadeamento em série
     """
-    assert arg > 0, "atempo must be greater than 0"
-    if 0.5 <= arg <= 100:  # if number already in normal limits
-        return f"atempo={arg}"  # return with one atempo
+    assert arg > 0, "atempo deve ser maior que 0"
+    if 0.5 <= arg <= 100:  # se o número já estiver nos limites normais
+        return f"atempo={arg}"  #voltar com um atempo
     else:
-        # use log to determine minimum number of atempos needed to achieve desired atempo
+        # use log para determinar o número mínimo de atempos necessários para atingir o atempo desejado
         numofatempos = math.ceil(math.log(arg, 0.5 if arg < 0.5 else 100))
-        # construct one atempo statement
+        # construir uma declaração de atempo
         atempo = f"atempo={nthroot(arg, numofatempos)}"
-        # daisy chain them
+        # encadeie-os
         return ",".join([atempo for _ in range(numofatempos)])
 
 
@@ -825,12 +825,12 @@ async def pitch(file, p=12):
 
 async def resize(image, width, height, delete_orig=True):
     """
-    resizes image
+    redimensiona a imagem
 
-    :param image: file
-    :param width: new width, thrown directly into ffmpeg so it can be things like -1 or iw/2
-    :param height: new height, same as width
-    :return: processed media
+    :param image: Arquivo
+    :param width: nova largura, lançada diretamente no ffmpeg para que possa ser algo como -1 ou iw/2
+    :param height: nova altura, igual à largura
+    :return: mídia processada
     """
     mt = await mediatype(image)
     exts = {
@@ -879,8 +879,8 @@ async def tint(file, col: discord.Color):
     # https://stackoverflow.com/a/3380739/9044183
     r, g, b = map(lambda x: x / 255, col.to_rgb())
     await run_command("ffmpeg", "-i", file, "-vf",
-                      f"hue=s=0,"  # make grayscale
-                      f"lutrgb=r=val*{r}:g=val*{g}:b=val*{b}:a=val,"  # basically set white to our color 
+                      f"hue=s=0,"  # fazer tons de cinza
+                      f"lutrgb=r=val*{r}:g=val*{g}:b=val*{b}:a=val,"  # basicamente definir branco para a nossa cor 
                       f"format=yuva420p", "-c:v", "png", "-fps_mode", "vfr", out)
 
     if mt == "GIF":
@@ -893,9 +893,9 @@ async def epicbirthday(text: str):
     birthdaytext = await tts(text)
     nameimage = reserve_tempfile("png")
     raise NotImplementedError
-    # TODO: replace with modern caption
-    # await renderpool.renderpool.submit(captionfunctions.epicbirthdaytext, text, nameimage)
-    # when to show the text
+    # TODO: substituir por legenda moderna
+    # aguardam renderpool.renderpool.submit(captionfunctions.epicbirthdaytext, texto, nomeimagem)
+    # quando mostrar o texto
     betweens = [
         "between(n,294,381)",
         "between(n,520,551)",
@@ -908,21 +908,21 @@ async def epicbirthday(text: str):
                       "-i", birthdaytext,
                       "-i", nameimage,
                       "-filter_complex",
-                      # split the tts audio
+                      # dividir o áudio tts
                       "[1:a] volume=10dB,asplit=5 [b1][b2][b3][b4][b5]; "
-                      # delay to correspond with video
+                      # atraso para corresponder com o vídeo
                       "[b1] adelay=9530:all=1 [d1];"
                       "[b2] adelay=17133:all=1 [d2];"
                       "[b3] adelay=40000:all=1 [d3];"
                       "[b4] adelay=47767:all=1 [d4];"
-                      # last one is long
+                      # o último é longo
                       "[b5] atempo=0.5,adelay=67390:all=1 [d5];"
                       "[0:a] volume=-5dB [a0];"
-                      # combine audio
+                      # combinar áudio
                       "[a0][d1][d2][d3][d4][d5] amix=inputs=6:normalize=0 [outa];"
-                      # add text
+                      # Adicione texto
                       f"[0:v][2:v] overlay=enable='{'+'.join(betweens)}' [outv]",
-                      # map to output
+                      # mapear para saída
                       "-map", "[outv]",
                       "-map", "[outa]",
                       out)
@@ -967,9 +967,9 @@ async def toapng(video):
     await run_command("ffmpeg", "-i", video, "-f", "apng", "-fps_mode", "vfr", outname)
 
     return outname
-    # ffmpeg method, removes dependence on apngasm but bigger and worse quality
-    # outname = reserve_tempfile("png")
-    # await run_command("ffmpeg", "-i", video, "-f", "apng", "-plays", "0", outname)
+    # método ffmpeg, remove a dependência do apngasmo, mas maior e pior qualidade
+    # outname = reserva_tempfile("png")
+    # aguarde run_command("ffmpeg", "-i", video, "-f", "apng", "-plays", "0", nome externo)
 
 
 async def motivate(media, captions: typing.Sequence[str]):
@@ -1012,11 +1012,11 @@ async def naive_overlay(im1, im2):
 
 async def freezemotivateaudio(video, audio, *caption):
     """
-    ends video with motivate caption
+    termina o vídeo com uma legenda motivadora
     :param video: video
     :param audio: audio
-    :param caption: caption to pass to motivate()
-    :return: processed media
+    :param caption: legenda para passar para motivar()
+    :return: mídia processada
     """
     lastframe = await frame_n(video, -1)
     clastframe = await motivate(lastframe, caption)
@@ -1054,9 +1054,9 @@ async def round_corners(media, border_radius=10):
 
 async def twitter_caption(media, captions, dark=True):
     mt = await mediatype(media)
-    # get_resolution call is separate so we can use for border radius
+    # chamada get_resolution é separada para que possamos usar o raio da borda
     width, height = await get_resolution(media)
-    # get text
+    # obter texto
     text = await processing.common.run_parallel(processing.vips.caption.twitter_text, captions,
                                                 processing.vips.vipsutils.ImageSize(width, height), dark)
     border_radius = width * (16 / 500)
@@ -1067,9 +1067,9 @@ async def twitter_caption(media, captions, dark=True):
     }
     outfile = reserve_tempfile(exts[mt])
     await run_command("ffmpeg", "-i", media, "-i", text, "-filter_complex",
-                      # round corners
+                      # cantos arredondados
                       # https://stackoverflow.com/a/62400465/9044183
-                      # copied from round_corners here for efficiency as 1 ffmpeg stream
+                      # copiado de round_corners aqui para eficiência como 1 fluxo ffmpeg
                       f"[0]format=yuva420p,"
                       f"geq=lum='p(X,Y)':a='"
                       f"if(gt(abs(W/2-X),W/2-{border_radius})*gt(abs(H/2-Y),"
@@ -1077,14 +1077,14 @@ async def twitter_caption(media, captions, dark=True):
                       f"if(lte(hypot({border_radius}-(W/2-abs(W/2-X)),"
                       f"{border_radius}-(H/2-abs(H/2-Y))),"
                       f"{border_radius}),255,0),255)'[media];"
-                      # add padding around media
+                      # adicionar preenchimento ao redor da mídia
                       f"[media]pad=w=iw+(iw*(12/500)*2):"
                       f"h=ih+(iw*(12/500)):"
                       f"x=(iw*(12/500)):"
                       f"y=0:color=#00000000[media];"
-                      # stack
+                      # pilha
                       f"[1][media]vstack=inputs=2[stacked];"
-                      # add background
+                      # adicionar plano de fundo
                       f"[stacked]split=2[bg][fg];"
                       f"[bg]drawbox=c={'#15202b' if dark else '#ffffff'}:replace=1:t=fill[bg];"
                       f"[bg][fg]overlay=format=auto",
@@ -1109,12 +1109,12 @@ async def trollface(media):
                       "-loop", "1", "-i", "rendering/images/trollface/mask.png",
                       "-i", "rendering/images/trollface/top.png",
                       "-filter_complex",
-                      # resize input media
+                      # redimensionar mídia de entrada
                       "[0]scale=500:407[media];"
-                      # mask input media
+                      # mídia de entrada de máscara
                       "[2:v]alphaextract[mask];"
                       "[media][mask]alphamerge[media];"
-                      # overlay bottom and top
+                      # sobreposição inferior e superior
                       "[1:v][media]overlay[media];"
                       "[media][3:v]overlay",
                       "-c:v", "png", "-c:a", "copy", "-fps_mode", "vfr",
@@ -1127,11 +1127,11 @@ async def trollface(media):
 
 def rgb_to_lightness(r, g, b):
     """
-    adapted from colorsys.rgb_to_hls()
-    :param r: red from 0-1
-    :param g: green from 0-1
-    :param b: blue from 0-1
-    :return: lightness from 0-1
+    adaptado de colorsys.rgb_to_hls()
+    :param r: vermelho de 0-1
+    :param g: verde de 0-1
+    :param b: azul de 0-1
+    :return: leveza de 0-1
     """
     maxc = max(r, g, b)
     minc = min(r, g, b)

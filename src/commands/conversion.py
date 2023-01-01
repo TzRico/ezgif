@@ -23,7 +23,7 @@ from utils.scandiscord import tenorsearch
 from utils.tempfiles import reserve_tempfile
 
 
-class Conversion(commands.Cog, name="Conversão"):
+class Conversion(commands.Cog, name="<:setared:1059251849791803443>Conversão"):
     """
     Comandos para converter tipos de mídia e baixar mídia hospedada na Internet.
     """
@@ -31,7 +31,7 @@ class Conversion(commands.Cog, name="Conversão"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(aliases=["filename", "name", "setname"])
+    @commands.hybrid_command(aliases=["filename", "nome", "setname"])
     async def rename(self, ctx, filename: str):
         """
         Renomeia a mídia.
@@ -56,7 +56,7 @@ class Conversion(commands.Cog, name="Conversão"):
         file = await process(ctx, lambda x: x, [["VIDEO", "GIF", "IMAGE", "AUDIO"]])
         await ctx.reply(file=discord.File(file, spoiler=True))
 
-    @commands.hybrid_command(aliases=["avatar", "pfp", "profilepicture", "profilepic", "ayowhothismf", "av"])
+    @commands.hybrid_command(aliases=["avatar", "pfp", "Fotodoperfil", "profilepic", "ayowhothismf", "av"])
     async def icon(self, ctx, *, body=None):
         """
         Pega o URL do ícone de um usuário ou servidor do Discord.
@@ -79,14 +79,14 @@ class Conversion(commands.Cog, name="Conversão"):
             for m in re.finditer(id_regex, body):
                 tasks.append(utils.discordmisc.iconfromsnowflakeid(int(m.group(0)), self.bot, ctx))
             result = await asyncio.gather(*tasks)
-            result = list(filter(None, result))  # remove Nones
+            result = list(filter(None, result))  # remover nenhum
         if result:
             await ctx.reply("\n".join(result)[0:2000])
         else:
             await ctx.send(f"{config.emojis['warning']} Nenhum usuário, servidor ou ID de mensagem válido encontrado.")
 
     @commands.hybrid_command(
-        aliases=["youtube", "youtubedownload", "youtubedl", "ytdownload", "download", "dl", "ytdl"])
+        aliases=["youtube", "youtubebaixar", "youtubedl", "ytbaixar", "baixar", "dl", "ytdl"])
     async def videodl(self, ctx, videourl, videoformat: typing.Literal["video", "audio"] = "video"):
         """
         Baixa um vídeo hospedado na web de sites como o youtube.
@@ -130,7 +130,7 @@ class Conversion(commands.Cog, name="Conversão"):
         except youtube_dl.DownloadError as e:
             await ctx.reply(f"{config.emojis['2exclamation']} {e}")
 
-    @commands.hybrid_command(aliases=["gif", "videotogif"])
+    @commands.hybrid_command(aliases=["gif", "videoparagif"])
     async def togif(self, ctx):
         """
         Converte um vídeo em um GIF.
@@ -140,7 +140,7 @@ class Conversion(commands.Cog, name="Conversão"):
         """
         await process(ctx, processing.ffmpeg.mp4togif, [["VIDEO"]])
 
-    @commands.hybrid_command(aliases=["apng", "videotoapng", "giftoapng"])
+    @commands.hybrid_command(aliases=["apng", "videoparapng", "gifparapng"])
     async def toapng(self, ctx):
         """
         Converte um vídeo ou gif em um png animado.
@@ -150,7 +150,7 @@ class Conversion(commands.Cog, name="Conversão"):
         """
         await process(ctx, processing.ffmpeg.toapng, [["VIDEO", "GIF"]], resize=False)
 
-    @commands.hybrid_command(aliases=["audio", "mp3", "tomp3", "aac", "toaac"])
+    @commands.hybrid_command(aliases=["audio", "mp3", "paramp3", "aac", "paraaac"])
     async def toaudio(self, ctx):
         """
         Converte um vídeo em apenas áudio.
@@ -174,9 +174,9 @@ class Conversion(commands.Cog, name="Conversão"):
         if file:
             await ctx.send(file)
         else:
-            await ctx.send(f"{config.emojis['x']} No tenor gif found.")
+            await ctx.send(f"{config.emojis['x']} Nenhum gif de tenor encontrado.")
 
-    @commands.hybrid_command(aliases=["video", "giftovideo", "tomp4", "mp4"])
+    @commands.hybrid_command(aliases=["video", "gifparavideo", "paramp4", "mp4"])
     async def tovideo(self, ctx):
         """
         Converte um GIF em um vídeo.

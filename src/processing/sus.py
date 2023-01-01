@@ -53,9 +53,9 @@ def get_text_dimensions(text_string, font):
 # get input string
 def sus(input_string: str):
     """
-    Cuts and slices the popular Jerma sus meme to any message
-    :param input_string: text to make the message with
-    :return: filename of generated image
+    Corta e fatia o popular meme Jerma sus em qualquer mensagem
+    :param input_string: texto para fazer a mensagem com
+    :return: nome do arquivo da imagem gerada
     """
     master_im = Image.open("rendering/images/imposter.jpg")
 

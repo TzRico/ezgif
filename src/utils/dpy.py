@@ -6,11 +6,11 @@ from discord.ext import commands
 
 def add_long_field(embed: discord.Embed, name: str, value: str) -> discord.Embed:
     """
-    add fields every 1024 characters to a discord embed
+    adicione campos a cada 1024 caracteres a uma embed do discord
     :param embed: embed
-    :param name: title of embed
-    :param value: long value
-    :return: updated embed
+    :param name: título de embed
+    :param value: valor longo
+    :return: embed atualizada
     """
     if len(value) <= 1024:
         return embed.add_field(name=name, value=value, inline=False)
@@ -18,7 +18,7 @@ def add_long_field(embed: discord.Embed, name: str, value: str) -> discord.Embed
         for i, section in enumerate(re.finditer('.{1,1024}', value, flags=re.S)):
             embed.add_field(name=name + f" {i + 1}", value=section[0], inline=False)
     if len(embed) > 6000:
-        raise Exception(f"Generated embed exceeds maximum size. ({len(embed)} > 6000)")
+        raise Exception(f"A embed gerada excede o tamanho máximo. ({len(embed)} > 6000)")
     return embed
 
 

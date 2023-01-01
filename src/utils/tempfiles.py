@@ -58,7 +58,7 @@ def reserve_tempfile(arg):
     tfs = session.get()
     tfs.append(arg)
     session.set(tfs)
-    logger.debug(f"Reserved new tempfile {arg}")
+    logger.debug(f"Novo arquivo temporário reservado {arg}")
     return arg
 
 
@@ -69,20 +69,20 @@ class TempFileSession:
     async def __aenter__(self):
         try:
             session.get()
-            raise Exception("Cannot create new TempFileSession, one already exists in this context.")
+            raise Exception("Não é possível criar um novo TempFileSession, já existe um neste contexto.")
         except LookupError:
             pass
-        logger.debug("Created new TempFileSession")
+        logger.debug("Nova TempFileSession criada")
         session.set([])
 
     async def __aexit__(self, *_):
         files = session.get()
-        logger.debug(f"TempFileSession exiting with {len(files)} files: {files}")
+        logger.debug(f"TempFileSession saindo com {len(files)} arquivos: {files}")
         fls = await asyncio.gather(*[aiofiles.os.remove(file) for file in files], return_exceptions=True)
         for f in fls:
             if isinstance(f, Exception):
                 logger.warn(f)
-        logger.debug(f"TempFileSession exited!")
+        logger.debug(f"TempFileSession encerrado!")
 
 
 session: contextvars.ContextVar[list[str]] = contextvars.ContextVar("session")
