@@ -2,14 +2,13 @@
 
 ## informações técnicas gerais sobre o bot
 
-- inspirado by [esmBot](https://github.com/esmBot/esmBot)
 - usa discord.py 2
 - usa libvips para legendagem
 - usa FFmpeg para processamento de mídia
 
 ## auto-hospedagem com docker
 
-### to install
+### para instalar
 
 Tudo o que você precisa para instalar você mesmo é [Docker Desktop](https://docs.docker.com/get-docker/)
 
@@ -48,11 +47,11 @@ execute no seu terminal favorito:
 docker start -ia gifmaker
 ```
 
-### to stop
+### para desligar o bot
 
 matar a janela do terminal/`CTRL+C` não matará o bot, porque o docker é executado em segundo plano.
 
-para matar o bot, corra
+para matar o bot, execute
 
 ```shell
 docker stop gifmaker
@@ -96,7 +95,7 @@ or [variáveis ​​ambientais](https://docs.docker.com/engine/reference/comman
 - `base64 config.py` prints the output to terminal
 - `base64 config.py > config.txt` writes the output to `config.txt`
 
-##### com píton:
+##### com python:
 
 ```python
 import base64
