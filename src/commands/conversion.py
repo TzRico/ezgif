@@ -25,7 +25,7 @@ from utils.tempfiles import reserve_tempfile
 
 class Conversion(commands.Cog, name="Conversion"):
     """
-    Commands to convert media types and download internet-hosted media.
+    Comandos para converter tipos de mídia e baixar mídia hospedada na Internet.
     """
 
     def __init__(self, bot):
@@ -34,13 +34,13 @@ class Conversion(commands.Cog, name="Conversion"):
     @commands.hybrid_command(aliases=["filename", "name", "setname"])
     async def rename(self, ctx, filename: str):
         """
-        Renames media.
-        Note: Discord's spoiler feature is dependent on filenames starting with "SPOILER_". renaming files may
-        unspoiler them.
+        Renomeia a mídia.
+        Observação: o recurso de spoiler do Discord depende de nomes de arquivos que começam com "SPOILER_". renomear arquivos pode
+        desembalá-los.
 
-        :param ctx: discord context
-        :param filename: the new name of the file
-        :mediaparam media: Any valid media.
+        :param ctx: contexto de discórdia
+        :param filename: o novo nome do arquivo
+        :mediaparam mídia: qualquer mídia válida.
         """
         file = await process(ctx, lambda x: x, [["VIDEO", "GIF", "IMAGE", "AUDIO"]])
         await ctx.reply(file=discord.File(file, filename=filename))
@@ -48,10 +48,10 @@ class Conversion(commands.Cog, name="Conversion"):
     @commands.hybrid_command(aliases=["spoil", "censor", "cw", "tw"])
     async def spoiler(self, ctx):
         """
-        Spoilers media.
+        Mídia de spoilers.
 
-        :param ctx: discord context
-        :mediaparam media: Any valid media.
+        :param ctx: contexto de discórdia
+        :mediaparam mídia: qualquer mídia válida.
         """
         file = await process(ctx, lambda x: x, [["VIDEO", "GIF", "IMAGE", "AUDIO"]])
         await ctx.reply(file=discord.File(file, spoiler=True))
@@ -59,17 +59,17 @@ class Conversion(commands.Cog, name="Conversion"):
     @commands.hybrid_command(aliases=["avatar", "pfp", "profilepicture", "profilepic", "ayowhothismf", "av"])
     async def icon(self, ctx, *, body=None):
         """
-        Grabs the icon url of a Discord user or server.
+        Pega o URL do ícone de um usuário ou servidor do Discord.
 
-        This command works off IDs. user mentions contain the ID
-        internally so mentioning a user will work. To get the icon of a guild, copy the guild id and use that as
-        the parameter. To get the icon of a webhook message, copy the message ID and ***in the same channel as
-        the message*** use the message ID as the parameter. This will also work for normal users though i have no
-        idea why you'd do it that way.
+        Este comando funciona com IDs. as menções do usuário contêm o ID
+        internamente, portanto, mencionar um usuário funcionará. Para obter o ícone de uma guilda, copie o ID da guilda e use-o como
+        o parâmetro. Para obter o ícone de uma mensagem de webhook, copie o ID da mensagem e ***no mesmo canal que
+        a mensagem***usa o ID da mensagem como parâmetro. Isso também funcionará para usuários normais, embora eu não tenha
+        idéia de por que você faria dessa maneira.
 
 
-        :param ctx: discord context
-        :param body: must contain a user, guild, or message ID. if left blank, the author's avatar will be sent.
+        :param ctx: contexto de discórdia
+        :param body: deve conter um ID de usuário, guilda ou mensagem. se deixado em branco, será enviado o avatar do autor.
         """
         if body is None:
             result = [await utils.discordmisc.iconfromsnowflakeid(ctx.author.id, self.bot, ctx)]
@@ -83,20 +83,20 @@ class Conversion(commands.Cog, name="Conversion"):
         if result:
             await ctx.reply("\n".join(result)[0:2000])
         else:
-            await ctx.send(f"{config.emojis['warning']} No valid user, guild, or message ID found.")
+            await ctx.send(f"{config.emojis['warning']} Nenhum usuário, guilda ou ID de mensagem válido encontrado.")
 
     @commands.hybrid_command(
         aliases=["youtube", "youtubedownload", "youtubedl", "ytdownload", "download", "dl", "ytdl"])
     async def videodl(self, ctx, videourl, videoformat: typing.Literal["video", "audio"] = "video"):
         """
-        Downloads a web hosted video from sites like youtube.
-        Any site here works: https://ytdl-org.github.io/youtube-dl/supportedsites.html
+        Baixa um vídeo hospedado na web de sites como o youtube.
+        Qualquer site aqui funciona: https://ytdl-org.github.io/youtube-dl/supportedsites.html
 
-        :param ctx: discord context
-        :param videourl: the URL of a video or the title of a youtube video.
-        :param videoformat: download audio or video.
+        :param ctx: contexto de discórdia
+        :param videourl: o URL de um vídeo ou o título de um vídeo do youtube.
+        :param videoformat: baixar áudio ou vídeo.
         """
-        msg = await ctx.reply(f"{config.emojis['working']} Downloading from site...", mention_author=False)
+        msg = await ctx.reply(f"{config.emojis['working']} Baixando do site...", mention_author=False)
         try:
             async with utils.tempfiles.TempFileSession():
                 r = await run_parallel(ytdownload, videourl, videoformat)
@@ -109,22 +109,22 @@ class Conversion(commands.Cog, name="Conversion"):
                     acodec = await processing.ffprobe.get_acodec(r)
                     # sometimes returns av1 codec
                     if vcodec and vcodec["codec_name"] not in ["h264", "gif", "webp", "png", "jpeg"]:
-                        txt += f"The returned video is in the `{vcodec['codec_name']}` " \
-                               f"({vcodec['codec_long_name']}) codec. Discord might not be able embed this " \
-                               f"format. You can use " \
-                               f"`{await prefix_function(self.bot, ctx.message, True)}reencode` to change the codec, " \
-                               f"though this may increase the filesize or decrease the quality.\n"
+                        txt += f"O vídeo retornado está no `{vcodec['codec_name']}` " \
+                               f"({vcodec['codec_long_name']}) codec. O Discord pode não conseguir incorporar isso " \
+                               f"formato. Você pode usar " \
+                               f"`{await prefix_function(self.bot, ctx.message, True)}reencode` para mudar o codec, " \
+                               f"embora isso possa aumentar o tamanho do arquivo ou diminuir a qualidade.\n"
                     if acodec and acodec["codec_name"] not in ["aac", "mp3"]:
-                        txt += f"The returned video's audio is in the `{vcodec['codec_name']}` " \
-                               f"({vcodec['codec_long_name']}) codec. Some devices cannot play this. " \
-                               f"You can use `{await prefix_function(self.bot, ctx.message, True)}reencode` " \
-                               f"to change the codec, " \
-                               f"though this may increase the filesize or decrease the quality."
-                    await msg.edit(content=f"{config.emojis['working']} Uploading to Discord...")
+                        txt += f"O áudio do vídeo retornado está no `{vcodec['codec_name']}` " \
+                               f"({vcodec['codec_long_name']}) codec. Alguns dispositivos não podem reproduzir isso. " \
+                               f"Você pode usar `{await prefix_function(self.bot, ctx.message, True)}reencode` " \
+                               f"para mudar o codec, " \
+                               f"embora isso possa aumentar o tamanho do arquivo ou diminuir a qualidade."
+                    await msg.edit(content=f"{config.emojis['working']} Carregando no Discord...")
                     await ctx.reply(txt, file=discord.File(r))
                 else:
-                    await ctx.reply(f"{config.emojis['warning']} No available downloads found within Discord's "
-                                    f"file upload limit.")
+                    await ctx.reply(f"{config.emojis['warning']} Nenhum download disponível encontrado no Discord "
+                                    f"limite de upload de arquivo.")
                 # os.remove(r)
                 await msg.delete()
         except youtube_dl.DownloadError as e:
@@ -133,30 +133,30 @@ class Conversion(commands.Cog, name="Conversion"):
     @commands.hybrid_command(aliases=["gif", "videotogif"])
     async def togif(self, ctx):
         """
-        Converts a video to a GIF.
+        Converte um vídeo em um GIF.
 
-        :param ctx: discord context
-        :mediaparam video: A video.
+        :param ctx: contexto de discórdia
+        :mediaparam vídeo: Um vídeo.
         """
         await process(ctx, processing.ffmpeg.mp4togif, [["VIDEO"]])
 
     @commands.hybrid_command(aliases=["apng", "videotoapng", "giftoapng"])
     async def toapng(self, ctx):
         """
-        Converts a video or gif to an animated png.
+        Converte um vídeo ou gif em um png animado.
 
-        :param ctx: discord context
-        :mediaparam video: A video or gif.
+        :param ctx: contexto de discórdia
+        :mediaparam video: Um vídeo ou gif.
         """
         await process(ctx, processing.ffmpeg.toapng, [["VIDEO", "GIF"]], resize=False)
 
     @commands.hybrid_command(aliases=["audio", "mp3", "tomp3", "aac", "toaac"])
     async def toaudio(self, ctx):
         """
-        Converts a video to only audio.
+        Converte um vídeo em apenas áudio.
 
-        :param ctx: discord context
-        :mediaparam video: A video.
+        :param ctx: contexto de discórdia
+        :mediaparam video: Um vídeo.
         """
         await process(ctx, processing.ffmpeg.toaudio, [["VIDEO", "AUDIO"]])
 
