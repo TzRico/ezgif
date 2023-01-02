@@ -42,9 +42,9 @@ number = typing.Union[float, int]
 
 def quote(string: str) -> str:
     """
-    (tenta) discord citar uma string
-    :param string: string para citar
-    :return: qstring uada
+    (tries to) discord quote a string
+    :param string: string to quote
+    :return: quoted string
     """
     return re.sub("([\n\r]|^) *>* *", "\n> ", string)
 
@@ -62,7 +62,7 @@ async def prefix_function(dbot: typing.Union[commands.Bot, commands.AutoShardedB
         else:
             # mentions or default or nothing for DMs only
             return mentions + [config.default_command_prefix, ""]
-    async with database.db.execute("SELECIONE o prefixo de guild_prefixes WHERE guild=?", (message.guild.id,)) as cur:
+    async with database.db.execute("SELECT prefix from guild_prefixes WHERE guild=?", (message.guild.id,)) as cur:
         pfx = await cur.fetchone()
         if pfx:
             pfx = pfx[0]
