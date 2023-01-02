@@ -1,0 +1,13 @@
+docker build -t tzrico/ezgif https://github.com/Tzputao/ezgif.git
+
+docker run -it --cap-add SYS_NICE --shm-size 8G --name ezgif tzrico/ezgif
+
+docker start -ia ezgif
+
+docker stop ezgif
+
+tenor api token AIzaSyAr8Y_wG8HnDKKRFY-ORrAmwZM60kUA0QQ
+
+token MTA1ODg0MTgwMDE3NTAxMzk3OQ.GBS5A8._8ziWHfPol4-J4RH5Ha7yFsUUQi4FVJWRKB80k
+
+
