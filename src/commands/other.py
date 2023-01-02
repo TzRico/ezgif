@@ -247,7 +247,7 @@ class Other(commands.Cog, name="<:setared:1059251849791803443>Outro"):
         prefix = await prefix_function(self.bot, ctx.message, True)
         # unspecified inquiry
         if inquiry is None:
-            embed = discord.Embed(title="<a:e_fogoVermelho:767757751346397194> ajuda", color=discord.Color(0xe74c3c),
+            embed = discord.Embed(title="<a:ezfogo:1059267224235413544> ajuda", color=discord.Color(0xe74c3c),
                                   description=f"Execute `{prefix}ajuda <categoria>` para listar comandos de "
                                               f"uma categoria.")
             # for every cog
