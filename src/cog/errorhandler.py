@@ -29,7 +29,7 @@ class ErrorHandlerCog(commands.Cog):
             try:
                 return await ctx.reply(*args, **kwargs)
             except discord.Forbidden:
-                logger.info(f"Reply to {ctx.message.id} and dm to {ctx.author.id} failed. Aborting.")
+                logger.info(f"A resposta para {ctx.message.id} e dm para {ctx.author.id} falhou. Abortando.")
 
         async def reply(msg, file=None, embed=None):
             if ctx.interaction:
@@ -42,39 +42,39 @@ class ErrorHandlerCog(commands.Cog):
             else:
                 try:
                     if ctx.guild and not ctx.channel.permissions_for(ctx.me).send_messages:
-                        logger.debug(f"No permissions to reply to {ctx.message.id}, trying to DM author.")
+                        logger.debug(f"Sem permissão para responder a {ctx.message.id}, tentando o autor do DM.")
                         return await dmauthor(msg, file=file, embed=embed)
                     return await ctx.reply(msg, file=file, embed=embed)
                 except discord.Forbidden:
-                    logger.debug(f"Forbidden to reply to {ctx.message.id}, trying to DM author")
+                    logger.debug(f"Proibido responder a {ctx.message.id}, tentando DM autor")
                     return await dmauthor(msg, file=file, embed=embed)
 
         async def logandreply(message):
             if ctx.guild:
-                ch = f"channel #{ctx.channel.name} ({ctx.channel.id}) in server {ctx.guild} ({ctx.guild.id})"
+                ch = f"canal #{ctx.channel.name} ({ctx.channel.id}) no servidor {ctx.guild} ({ctx.guild.id})"
             else:
                 ch = "DMs"
-            logger.info(f"Command '{ctx.message.content}' by "
+            logger.info(f"Comando '{ctx.message.content}' por "
                         f"@{ctx.message.author.name}#{ctx.message.author.discriminator} ({ctx.message.author.id}) "
-                        f"in {ch} failed due to {message}.")
+                        f"em {ch} falhou devido a {message}.")
             await reply(message)
 
         errorstring = str(commanderror)
         if isinstance(commanderror, discord.Forbidden):
-            await dmauthor(f"{config.emojis['x']} I don't have permissions to send messages in that channel.")
+            await dmauthor(f"{config.emojis['x']} Não tenho permissão para enviar mensagens nesse canal.")
             logger.info(commanderror)
         if isinstance(commanderror, discord.ext.commands.errors.CommandNotFound):
             # to prevent funny 429s, error cooldowns are only sent once before the cooldown is over.
             if ctx.author.id in self.antispambucket.keys():
                 if self.antispambucket[ctx.author.id] > now():
-                    logger.debug(f"Skipping error reply to {ctx.author} ({ctx.author.id}): {errorstring}")
+                    logger.debug(f"Ignorando resposta de erro para {ctx.author} ({ctx.author.id}): {errorstring}")
                     return
             if ctx.message.content.strip().lower() in ["$w", "$wa", "$waifu", "$h", "$ha", "$husbando", "$wx", "$hx",
                                                        "$m", "$ma", "$marry", "$mx", "$g", "$tu", "$top", "$mmrk",
                                                        "$rolls"]:
                 # this command is spammed so much, fuckn ignore it
                 # https://mudae.fandom.com/wiki/List_of_Commands#.24waifu_.28.24w.29
-                logger.debug(f"Ignoring {ctx.message.content}")
+                logger.debug(f"ignorando {ctx.message.content}")
                 return
 
             # remove money
@@ -85,7 +85,7 @@ class ErrorHandlerCog(commands.Cog):
                     is_decimal = False
                     break
             if is_decimal:
-                logger.debug(f"Ignoring {ctx.message.content}")
+                logger.debug(f"ignorando {ctx.message.content}")
                 return
 
             # remove prefix, remove excess args
@@ -98,17 +98,17 @@ class ErrorHandlerCog(commands.Cog):
             prefix = await prefix_function(self.bot, ctx.message, True)
             match = difflib.get_close_matches(cmd, allcmds, n=1, cutoff=0)[0]
             err = f"{config.emojis['exclamation_question']} O comando `{prefix}{cmd}` não existe. " \
-                  f"Did you mean **{prefix}{match}**?"
+                  f"Você quis dizer **{prefix}{match}**?"
             await logandreply(err)
             self.antispambucket[ctx.author.id] = now() + config.cooldown
         elif isinstance(commanderror, discord.ext.commands.errors.NotOwner):
-            err = f"{config.emojis['x']} You are not authorized to use this command."
+            err = f"{config.emojis['x']} Você não está autorizado a usar este comando."
             await logandreply(err)
         elif isinstance(commanderror, discord.ext.commands.errors.CommandOnCooldown):
             # to prevent funny 429s, error cooldowns are only sent once before the cooldown is over.
             if ctx.author.id in self.antispambucket.keys():
                 if self.antispambucket[ctx.author.id] > now():
-                    logger.debug(f"Skipping error reply to {ctx.author} ({ctx.author.id}): {errorstring}")
+                    logger.debug(f"Ignorando resposta de erro para {ctx.author} ({ctx.author.id}): {errorstring}")
                     return
             err = f"{config.emojis['clock']} {errorstring}"
             await logandreply(err)
@@ -117,7 +117,7 @@ class ErrorHandlerCog(commands.Cog):
             err = f"{config.emojis['warning']} {errorstring}"
             if ctx.command:
                 prefix = await prefix_function(self.bot, ctx.message, True)
-                err += f" Run `{prefix}ajuda {ctx.command}` to see how to use this command."
+                err += f" Execute `{prefix}ajuda {ctx.command}` para ver como usar este comando."
             await logandreply(err)
         elif isinstance(commanderror, discord.ext.commands.errors.NoPrivateMessage):
             err = f"{config.emojis['warning']} {errorstring}"
@@ -133,8 +133,8 @@ class ErrorHandlerCog(commands.Cog):
                     isinstance(commanderror, discord.ext.commands.HybridCommandError):
                 commanderror = commanderror.original
             logger.error(commanderror, exc_info=(type(commanderror), commanderror, commanderror.__traceback__))
-            if "OSError: [Errno 28] No space left on device" in str(commanderror):
-                logger.warn("No space left on device, forcibly clearing temp folder")
+            if "OSError: [Errno 28] Sem espaço no dispositivo" in str(commanderror):
+                logger.warn("Não há mais espaço no dispositivo, forçando a limpeza da pasta temporária")
                 files = glob.glob(utils.tempfiles.temp_dir + "/*")
                 logger.warn(f"deleting {len(files)} files")
                 logger.debug(files)
@@ -149,24 +149,24 @@ class ErrorHandlerCog(commands.Cog):
             # concurrent.futures.process.BrokenProcessPool))
 
             if is_hosting_issue:
-                desc = "If this error keeps occurring, report this with the attached traceback file to the GitHub."
+                desc = "Se esse erro continuar ocorrendo, relate isso com o arquivo traceback anexado ao GitHub."
             else:
-                desc = "Please report this error with the attached traceback file to the GitHub."
+                desc = "Relate este erro com o arquivo traceback anexado ao GitHub."
             embed = discord.Embed(color=0xed1c24, description=desc)
-            embed.add_field(name=f"{config.emojis['2exclamation']} Report Issue to GitHub",
-                            value=f"[Create New Issue](https://github.com/HexCodeFFF/mediaforge"
+            embed.add_field(name=f"{config.emojis['2exclamation']} Relatar problema ao GitHub",
+                            value=f"[Criar novo problema](https://github.com/Tzputao/ezgif"
                                   f"/issues/new?labels=bug&template=bug_report.md&title"
                                   f"={urllib.parse.quote(str(commanderror), safe='')[:848]})\n[View Issu"
-                                  f"es](https://github.com/HexCodeFFF/mediaforge/issues)")
+                                  f"es](https://github.com/Tzputao/ezgif/issues)")
             with io.BytesIO() as buf:
                 trheader = f"DATETIME:{datetime.datetime.now()}\nCOMMAND:{ctx.message.content}\nTRACEBACK:\n"
                 buf.write(bytes(trheader + ''.join(
                     traceback.format_exception(commanderror)), encoding='utf8'))
                 buf.seek(0)
                 if is_hosting_issue:
-                    errtxt = f"{config.emojis['2exclamation']} Your command encountered an error due to limited " \
-                             f"resources on the server. If you would like to support the upkeep of MediaForge and " \
-                             f"getting a better server, support me on Ko-Fi here: <https://ko-fi.com/reticivis>"
+                    errtxt = f"{config.emojis['2exclamation']} Seu comando encontrou um erro devido a limitação " \
+                             f"recursos no servidor. Se você gostaria de apoiar a manutenção do Ezgif e " \
+                             f"obtendo um servidor melhor, me apoie no Ko-Fi aqui: <https://ko-fi.com/reticivis>"
                 else:
                     errtxt = (f"{config.emojis['2exclamation']} `{get_full_class_name(commanderror)}: "
                               f"{errorstring}`")[:2000]

@@ -19,18 +19,18 @@ class CommandChecksCog(commands.Cog):
         async with database.db.execute("SELECT banreason from bans WHERE user=?", (ctx.author.id,)) as cur:
             ban = await cur.fetchone()
         if ban:
-            outtext = "You are banned from this bot"
+            outtext = "Você foi banido deste bot"
             if ban[0]:
-                outtext += f" for the following reason:\n{quote(ban[0])}\n"
+                outtext += f" pelo seguinte motivo:\n{quote(ban[0])}\n"
             else:
                 outtext += f".\n"
-            outtext += f"To appeal this, "
+            outtext += f"Para apelar, "
             if self.bot.owner_id == 214511018204725248:  # my ID; public bot
-                outtext += "raise an issue at https://github.com/HexCodeFFF/mediaforge/issues/new?assignees=" \
+                outtext += "levantar uma questão em https://github.com/HexCodeFFF/mediaforge/issues/new?assignees=" \
                            "&labels=unban+request&template=unban_request.yaml&title=Unban+request+for" \
                            "+%3CYOUR+NAME+HERE%3E"
             else:
-                outtext += "contact the bot owner."
+                outtext += "entre em contato com o proprietário do bot."
             raise commands.CheckFailure(outtext)
         else:
             return True
