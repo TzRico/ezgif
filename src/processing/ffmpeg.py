@@ -33,13 +33,13 @@ async def edit_msg_with_webhookmessage_polyfill(msg: typing.Union[discord.Messag
 
 async def ensureduration(media, ctx: commands.Context):
     """
-    ensures that media is under or equal to the config minimum frame count and fps
-    :param media: media to trim
+    garante que a mídia esteja abaixo ou igual à contagem mínima de quadros e fps da configuração
+    :param media: mídia para aparar
     :param ctx: discord context
-    :return: processed media or original media, within config.max_frames
+    :return: mídia processada ou mídia original, dentro de config.max_frames
     """
     if await ctx.bot.is_owner(ctx.author):
-        logger.debug(f"bot owner is exempt from duration checks.")
+        logger.debug(f"o proprietário do bot está isento de verificações de duração.")
         return media
     if await mediatype(media) != "VIDEO":
         return media
@@ -61,8 +61,8 @@ async def ensureduration(media, ctx: commands.Context):
         return media
     else:
         newdur = max_frames / fps
-        tmsg = f"{config.emojis['warning']} input file is too long (~{frames} frames)! " \
-               f"Trimming to {round(newdur, 1)}s (~{max_frames} frames)... "
+        tmsg = f"{config.emojis['warning']} arquivo de entrada é muito longo (~{frames} frames)! " \
+               f"Corte para {round(newdur, 1)}s (~{max_frames} quadros)... "
         logger.debug(tmsg)
         msg = await ctx.reply(tmsg)
         media = await trim(media, newdur)
@@ -80,9 +80,9 @@ async def hasaudio(video):
 
 async def forceaudio(video):
     """
-    gives videos with no audio a silent audio stream
-    :param video: file
-    :return: video filename
+    fornece aos vídeos sem áudio um fluxo de áudio silencioso
+    :param video: Arquivo
+    :return: video nome do arquivo
     """
     if await hasaudio(video):
         return video
@@ -96,12 +96,12 @@ async def forceaudio(video):
 
 async def twopasscapvideo(video, maxsize: int, audio_bitrate=128000):
     """
-    attempts to intelligently cap video filesize with two pass encoding
+    tenta limitar de forma inteligente o tamanho do arquivo de vídeo com codificação de duas passagens
 
-    :param video: video file (str path)
-    :param maxsize: max size (in bytes) of output file
-    :param audio_bitrate: optionally specify an audio bitrate in bits per second
-    :return: new video file below maxsize
+    :param vídeo: arquivo de vídeo (caminho str)
+    :param maxsize: tamanho máximo (em bytes) do arquivo de saída
+    :param audio_bitrate: especifique opcionalmente uma taxa de bits de áudio em bits por segundo
+    :return: novo arquivo de vídeo abaixo do tamanho máximo
     """
     if (size := os.path.getsize(video)) < maxsize:
         return video
@@ -112,10 +112,10 @@ async def twopasscapvideo(video, maxsize: int, audio_bitrate=128000):
     for tolerance in [.98, .95, .90, .75, .5]:
         target_video_bitrate = (target_total_bitrate - audio_bitrate) * tolerance
         if target_video_bitrate <= 0:
-            raise NonBugError("Cannot fit video into Discord.")
-        logger.info(f"trying to force {video} ({humanize.naturalsize(size)}) "
-                    f"under {humanize.naturalsize(maxsize)} with tolerance {tolerance}. "
-                    f"trying {humanize.naturalsize(target_video_bitrate / 8)}/s")
+            raise NonBugError("Não é possível ajustar o vídeo no Discord.")
+        logger.info(f"tentando forçar {video} ({humanize.naturalsize(size)}) "
+                    f"sob {humanize.naturalsize(maxsize)} com tolerância {tolerance}. "
+                    f"Tentando {humanize.naturalsize(target_video_bitrate / 8)}/s")
         pass1log = utils.tempfiles.temp_file_name()
         outfile = reserve_tempfile("mp4")
         await run_command('ffmpeg', '-y', '-i', video, '-c:v', 'h264', '-b:v', str(target_video_bitrate), '-pass', '1',
@@ -129,21 +129,21 @@ async def twopasscapvideo(video, maxsize: int, audio_bitrate=128000):
             reserve_tempfile(f)
         if (size := os.path.getsize(outfile)) < maxsize:
 
-            logger.info(f"successfully created {humanize.naturalsize(size)} video!")
+            logger.info(f"vídeo {humanize.naturalsize(size)} criado com sucesso!")
             return outfile
         else:
 
-            logger.info(f"tolerance {tolerance} failed. output is {humanize.naturalsize(size)}")
-    raise NonBugError(f"Unable to fit {video} within {humanize.naturalsize(maxsize)}")
+            logger.info(f"tolerância {tolerance} falhou. saída é {humanize.naturalsize(size)}")
+    raise NonBugError(f"Não foi possível ajustar {video} dentro {humanize.naturalsize(maxsize)}")
 
 
 async def intelligentdownsize(media, maxsize: int):
     """
-    tries to intelligently downsize media to fit within maxsize
+    tenta reduzir o tamanho da mídia de forma inteligente para caber no tamanho máximo
 
-    :param media: media path str
-    :param maxsize: max size in bytes
-    :return: new media file below maxsize
+    :param media: caminho de mídia str
+    :param maxsize: tamanho máximo em bytes
+    :return: novo arquivo de mídia abaixo do tamanho máximo
     """
 
     size = os.path.getsize(media)
@@ -164,19 +164,19 @@ async def intelligentdownsize(media, maxsize: int):
 
 async def assurefilesize(media, re_encode=True):
     """
-    compresses files to fit within config set discord limit
+    compacta arquivos para caber dentro do limite do discord do conjunto de configuração
 
     :param re_encode: try to reencode media?
     :param media: media
-    :return: filename of fixed media if it works, False if it still is too big.
+    :return: nome do arquivo da mídia fixa se funcionar, False se ainda for muito grande.
     """
     if not media:
-        raise ReturnedNothing(f"assurefilesize() was passed no media.")
+        raise ReturnedNothing(f"surefilesize() não foi passado para nenhuma mídia.")
     mt = await mediatype(media)
     size = os.path.getsize(media)
     if size > config.way_too_big_size:
-        raise NonBugError(f"Resulting file is {humanize.naturalsize(size)}. "
-                          f"Aborting upload since resulting file is over "
+        raise NonBugError(f"O arquivo resultante é {humanize.naturalsize(size)}. "
+                          f"Abortando o upload porque o arquivo resultante acabou "
                           f"{humanize.naturalsize(config.way_too_big_size)}")
     if size < config.file_upload_limit:
         return media
@@ -187,7 +187,7 @@ async def assurefilesize(media, re_encode=True):
         # file size should be roughly proportional to # of pixels so we can work with that :3
         return await intelligentdownsize(media, config.file_upload_limit)
     else:
-        raise NonBugError(f"File is too big to upload.")
+        raise NonBugError(f"O arquivo é muito grande para carregar.")
 
 
 async def mp4togif(mp4):
@@ -233,12 +233,12 @@ async def allreencode(file):
 
         return outname
     else:
-        raise Exception(f"{file} of type {mt} cannot be re-encoded")
+        raise Exception(f"{file} do tipo {mt} não pode ser recodificado")
 
 
 async def giftomp4(gif):
     """
-    converts gif to mp4
+    converte gif para mp4
     :param gif: gif
     :return: mp4
     """
@@ -252,8 +252,8 @@ async def giftomp4(gif):
 
 async def toaudio(media):
     """
-    converts video to only audio
-    :param media: video or audio ig
+    converte vídeo para apenas áudio
+    :param media: ig de vídeo ou áudio
     :return: aac
     """
     name = reserve_tempfile("mp3")  # discord wont embed aac
@@ -264,7 +264,7 @@ async def toaudio(media):
 
 async def mediatopng(media):
     """
-    converts media to png
+    converte mídia para png
     :param media: media
     :return: png
     """
@@ -278,10 +278,10 @@ async def mediatopng(media):
 # https://stackoverflow.com/questions/65728616/how-to-get-ffmpeg-to-consistently-apply-speed-effect-to-first-few-frames
 async def speed(file, sp):
     """
-    changes speed of media
+    altera a velocidade da mídia
     :param file: media
-    :param sp: speed to multiply media by
-    :return: processed media
+    :param sp: velocidade para multiplicar mídia por
+    :return: mídia processada
     """
 
     mt = await mediatype(file)
@@ -299,7 +299,7 @@ async def speed(file, sp):
                           "-map", "[v]", "-map", "[a]", "-t", str(duration / float(sp)), "-c:v", "png", "-fps_mode",
                           "vfr", outname)
         if await count_frames(outname) < 2:
-            raise NonBugError("Output file has less than 2 frames. Try reducing the speed.")
+            raise NonBugError("O arquivo de saída tem menos de 2 quadros. Tente reduzir a velocidade.")
         if mt == "GIF":
             outname = await mp4togif(outname)
 
@@ -308,9 +308,9 @@ async def speed(file, sp):
 
 async def reverse(file):
     """
-    reverses media (-1x speed)
+    inverte a mídia (-1x velocidade)
     :param file: media
-    :return: procesed media
+    :return: mídia processada
     """
     mt = await mediatype(file)
     outname = reserve_tempfile("mp4")
@@ -324,10 +324,10 @@ async def reverse(file):
 
 async def random(file, frames: int):
     """
-    shuffle frames
+    quadros aleatórios
     :param file: media
-    :param frames: number of frames in internal cache
-    :return: procesed media
+    :param frames: número de quadros no cache interno
+    :return: mídia processada
     """
     mt = await mediatype(file)
     outname = reserve_tempfile("mp4")
@@ -342,11 +342,11 @@ async def random(file, frames: int):
 
 async def quality(file, crf, qa):
     """
-    changes quality of videos/gifs with ffmpeg compression
+    altera a qualidade de vídeos/gifs com compactação ffmpeg
     :param file: media
-    :param crf: FFmpeg CRF param
-    :param qa: audio bitrate
-    :return: processed media
+    :param crf: Parâmetro FFmpeg CRF
+    :param qa: Taxa de bits do áudio
+    :return: mídia processada
     """
     mt = await mediatype(file)
     outname = reserve_tempfile("mp4")
@@ -361,10 +361,10 @@ async def quality(file, crf, qa):
 
 async def changefps(file, fps):
     """
-    changes FPS of media
+    altera o FPS da mídia
     :param file: media
     :param fps: FPS
-    :return: processed media
+    :return: mídia processada
     """
     mt = await mediatype(file)
     outname = reserve_tempfile("mp4")
@@ -378,9 +378,9 @@ async def changefps(file, fps):
 
 async def invert(file):
     """
-    inverts colors
+    inverte as cores
     :param file: media
-    :return: processed media
+    :return: mídia processada
     """
     mt = await mediatype(file)
     exts = {
@@ -399,9 +399,9 @@ async def invert(file):
 
 async def pad(file):
     """
-    pads media into a square shape
+    pads mídia em uma forma quadrada
     :param file: media
-    :return: processed media
+    :return: mídia processada
     """
     mt = await mediatype(file)
     if mt == "IMAGE":
@@ -419,10 +419,10 @@ async def pad(file):
 
 async def gifloop(file, loop):
     """
-    loops a gif
+    faz um loop em um gif
     :param file: gif
-    :param loop: # of times to loop
-    :return: processed media
+    :param loop: # de vezes para loop
+    :return: mídia processada
     """
     outname = reserve_tempfile("gif")
     await run_command("ffmpeg", "-hide_banner", "-i", file, "-loop", str(loop), "-vcodec", "copy", outname)
@@ -432,10 +432,10 @@ async def gifloop(file, loop):
 
 async def videoloop(file, loop):
     """
-    loops a gif
+    faz um loop em um gif
     :param file: gif
-    :param loop: # of times to loop
-    :return: processed media
+    :param loop: # de vezes para loop
+    :return: mídia processada
     """
     mt = await mediatype(file)
     exts = {
@@ -450,8 +450,8 @@ async def videoloop(file, loop):
 
 async def imageaudio(file0, file1):
     """
-    combines an image and an audio file into a video
-    :param files: [image, audio]
+    combina uma imagem e um arquivo de áudio em um vídeo
+    :param files: [imagem, áudio]
     :return: video
     """
     audio = file1
@@ -467,9 +467,9 @@ async def imageaudio(file0, file1):
 
 async def addaudio(file0, file1, loops=0):
     """
-    adds audio to media
-    :param files: [media, audiotoadd]
-    :return: video or audio
+   adiciona áudio à mídia
+    :param files: [mídia, áudio para adicionar]
+    :return: vídeo ou áudio
     """
     # TODO: this can trim media short? not sure why...
     audio = file1
@@ -514,9 +514,9 @@ async def addaudio(file0, file1, loops=0):
 
 async def concatv(file0, file1):
     """
-    concatenates 2 videos
-    :param files: [video, video]
-    :return: combined video
+    concatena 2 vídeos
+    :param files: [vídeo, vídeo]
+    :return: vídeo combinado
     """
     video0 = await forceaudio(file0)
     fixedvideo0 = reserve_tempfile("mp4")
@@ -550,7 +550,7 @@ async def concatv(file0, file1):
 
 async def naive_vstack(file0, file1):
     """
-    stacks media assuming files are same width
+    empilha a mídia assumindo que os arquivos têm a mesma largura
     """
     mts = await asyncio.gather(mediatype(file0), mediatype(file1))
     if mts[0] == "IMAGE" and mts[1] == "IMAGE":
@@ -572,10 +572,10 @@ async def naive_vstack(file0, file1):
 
 async def stack(file0, file1, style):
     """
-    stacks media
-    :param files: [media, media]
-    :param style: "hstack" or "vstack"
-    :return: processed media
+    empilha mídia
+    :param files: [mídia, mídia]
+    :param style: "hstack" ou "vstack"
+    :return: mídia processada
     """
     mts = [await mediatype(file0), await mediatype(file1)]
     if mts[0] == "IMAGE" and mts[1] == "IMAGE":  # easier to just make this an edge case
@@ -608,12 +608,12 @@ async def stack(file0, file1, style):
 
 async def overlay(file0, file1, alpha: float, mode: str = 'overlay'):
     """
-    stacks media
-    :param file0: file 0
-    :param file1: file 1
-    :param alpha: opacity of top media, 0-1
-    :param mode: blend mode
-    :return: processed media
+    empilha mídia
+    :param file0: arquivo 0
+    :param file1: arquivo 1
+    :param alpha: opacidade da mídia superior, 0-1
+    :param mode: modo de mistura
+    :return: mídia processada
     """
     assert mode in ['overlay', 'add']
     assert 0 <= alpha <= 1
@@ -654,11 +654,11 @@ async def overlay(file0, file1, alpha: float, mode: str = 'overlay'):
 
 async def trim(file, length, start=0):
     """
-    trims media to length seconds
+    apara mídia para comprimento segundos
     :param file: media
-    :param length: duration to set video to in seconds
-    :param start: time in seconds to begin the trimmed video
-    :return: processed media
+    :param length: duração para definir o vídeo em segundos
+    :param start: tempo em segundos para iniciar o vídeo cortado
+    :return: mídia processada
     """
     mt = await mediatype(file)
     exts = {
@@ -680,12 +680,12 @@ async def trim(file, length, start=0):
 
 async def ensuresize(ctx, file, minsize, maxsize):
     """
-    Ensures valid media is between minsize and maxsize in resolution
+    Garante que a mídia válida esteja entre minsize e maxsize em resolução
     :param ctx: discord context
     :param file: media
-    :param minsize: minimum width/height in pixels
-    :param maxsize: maximum height in pixels
-    :return: original or resized media
+    :param minsize: largura/altura mínima em pixels
+    :param maxsize: altura máxima em pixels
+    :return: mídia original ou redimensionada
     """
     resized = False
     if await mediatype(file) not in ["IMAGE", "VIDEO", "GIF"]:
@@ -705,7 +705,7 @@ async def ensuresize(ctx, file, minsize, maxsize):
         w, h = await get_resolution(file)
         resized = True
     if await ctx.bot.is_owner(ctx.author):
-        logger.debug(f"bot owner is exempt from downsize checks")
+        logger.debug(f"o proprietário do bot está isento de verificações de redução de tamanho")
         return file
     if w > maxsize:
         file = await resize(file, maxsize, "-1")
@@ -716,8 +716,8 @@ async def ensuresize(ctx, file, minsize, maxsize):
         w, h = await get_resolution(file)
         resized = True
     if resized:
-        logger.info(f"Resized from {owidth}x{oheight} to {w}x{h}")
-        await ctx.reply(f"Resized input media from {int(owidth)}x{int(oheight)} to {int(w)}x{int(h)}.", delete_after=5,
+        logger.info(f"Redimensionado de {owidth}x{oheight} para {w}x{h}")
+        await ctx.reply(f"Mídia de entrada redimensionada de {int(owidth)}x{int(oheight)} para {int(w)}x{int(h)}.", delete_after=5,
                         mention_author=False)
     return file
 

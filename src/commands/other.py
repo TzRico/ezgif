@@ -46,26 +46,26 @@ class Other(commands.Cog, name="Outros"):
         if prefix is None or prefix == config.default_command_prefix:
             await database.db.execute("DELETE FROM guild_prefixes WHERE guild=?", (ctx.guild.id,))
             await database.db.commit()
-            await ctx.reply(f"{config.emojis['check']} Set guild prefix back to global default "
+            await ctx.reply(f"{config.emojis['check']} Defina o prefixo do servidor de volta ao padrão global "
                             f"(`{config.default_command_prefix}`).")
 
         else:
             if not 50 >= len(prefix) > 0:
-                raise commands.BadArgument(f"prefix must be between 1 and 50 characters.")
+                raise commands.BadArgument(f"prefixo deve ter entre 1 e 50 caracteres.")
             # check for invalid characters by returning all invalid characters
             invalids = re.findall(r"[^a-zA-Z0-9!$%^&()_\-=+,<.>\/?;'[{\]}|]", prefix)
             if invalids:
-                raise commands.BadArgument(f"{config.emojis['x']} Found invalid characters: "
+                raise commands.BadArgument(f"{config.emojis['x']} Caracteres inválidos encontrados: "
                                            f"{', '.join([discord.utils.escape_markdown(i) for i in invalids])}")
             else:
                 await database.db.execute("REPLACE INTO guild_prefixes(guild, prefix) VALUES (?,?)",
                                           (ctx.guild.id, prefix))
                 await database.db.commit()
-                await ctx.reply(f"{config.emojis['check']} Set guild prefix to `{prefix}`")
+                await ctx.reply(f"{config.emojis['check']} Defina o prefixo do servidor para `{prefix}`")
                 if prefix.isalpha():  # only alphabetic characters
                     await ctx.reply(f"{config.emojis['warning']} Your prefix only contains alphabetic characters. "
-                                    f"This could cause normal sentences/words to be interpreted as commands. "
-                                    f"This could annoy users.")
+                                    f"Isso pode fazer com que frases/palavras normais sejam interpretadas como comandos. "
+                                    f"Isso pode incomodar os usuários.")
 
     @commands.guild_only()
     @commands.has_guild_permissions(manage_emojis=True)
@@ -73,13 +73,13 @@ class Other(commands.Cog, name="Outros"):
     @commands.hybrid_command(aliases=["createemoji"])
     async def addemoji(self, ctx, name):
         """
-        Adds a file as an emoji to a server.
+        Adiciona um arquivo como emoji a um servidor.
 
-        Both MediaForge and the command caller must have the Manage Emojis permission.
+        Tanto o Ezgif quanto o chamador do comando devem ter a permissão Gerenciar Emojis.
 
         :param ctx: discord context
         :param name: The emoji name. Must be at least 2 characters.
-        :mediaparam media: A gif or image.
+        :mediaparam media: Um gif ou imagem.
         """
         await process(ctx, utils.discordmisc.add_emoji, [["GIF", "IMAGE"]], ctx.guild, name, expectimage=False,
                       resize=False)
@@ -93,12 +93,12 @@ class Other(commands.Cog, name="Outros"):
         """
         Adds a file as a sticker to a server.
 
-        Both MediaForge and the command caller must have the Manage Emojis and Stickers permission.
+        Tanto o Ezgif quanto o chamador do comando devem ter a permissão Gerenciar Emojis e Adesivos.
 
         :param ctx: discord context
-        :param stickeremoji: The related emoji. Must be a single default emoji.
-        :param name: The sticker name. Must be at least 2 characters.
-        :mediaparam media: A gif or image.
+        :param stickeremoji: O emoji relacionado. Deve ser um único emoji padrão.
+        :param name: O nome do adesivo. Deve ter pelo menos 2 caracteres.
+        :mediaparam media: Um gif ou imagem.
         """
         await process(ctx, utils.discordmisc.add_sticker, [["GIF", "IMAGE"]], ctx.guild, stickeremoji, name,
                       expectimage=False, resize=False)
@@ -109,14 +109,14 @@ class Other(commands.Cog, name="Outros"):
     @commands.hybrid_command(aliases=["guildatabase.dbanner", "serverbanner", "banner"])
     async def setbanner(self, ctx):
         """
-        Sets a file as the server banner.
-        Server must support banners.
+        Define um arquivo como o banner do servidor.
+        O servidor deve suportar banners.
 
         :param ctx: discord context
-        :mediaparam media: An image.
+        :mediaparam media: Uma imagem.
         """
         if "BANNER" not in ctx.guild.features:
-            await ctx.reply(f"{config.emojis['x']} This guild does not support banners.")
+            await ctx.reply(f"{config.emojis['x']} Esta guilda não suporta banners.")
             return
         await process(ctx, utils.discordmisc.set_banner, [["IMAGE"]], ctx.guild, expectimage=False,
                       resize=False)
@@ -127,11 +127,11 @@ class Other(commands.Cog, name="Outros"):
     @commands.hybrid_command(aliases=["setguildicon", "guildicon", "servericon", "seticon"])
     async def setservericon(self, ctx):
         """
-        Sets a file as the server icon.
-        If setting a gif, server must support animated icons.
+        Define um arquivo como o ícone do servidor.
+        Se definir um gif, o servidor deve suportar ícones animados.
 
         :param ctx: discord context
-        :mediaparam media: An image or gif.
+        :mediaparam media: Uma imagem ou gif.
         """
         await process(ctx, utils.discordmisc.set_icon, [["IMAGE", "GIF"]], ctx.guild, expectimage=False,
                       resize=False)
@@ -139,27 +139,27 @@ class Other(commands.Cog, name="Outros"):
     @commands.hybrid_command(aliases=["statistics"])
     async def stats(self, ctx):
         """
-        Displays some stats about what the bot is currently doing.
+        Exibe algumas estatísticas sobre o que o bot está fazendo no momento.
 
         :param ctx: discord context
         """
         embed = discord.Embed(color=discord.Color(0xe74c3c), title="Statistics")
-        embed.add_field(name="Queued Tasks", value=f"{core.v2queue.queued}")
-        embed.add_field(name="Number of tasks this instance can run at once", value=f"{core.v2queue.workers}")
+        embed.add_field(name="Tarefas na fila", value=f"{core.v2queue.queued}")
+        embed.add_field(name="Número de tarefas que esta instância pode executar de uma só vez", value=f"{core.v2queue.workers}")
         if isinstance(self.bot, discord.AutoShardedClient):
-            embed.add_field(name="Total Bot Shards", value=f"{len(self.bot.shards)}")
+            embed.add_field(name="Total de fragmentos de bot", value=f"{len(self.bot.shards)}")
         await ctx.reply(embed=embed)
 
     @commands.hybrid_command(aliases=["shard", "shardstats", "shardinfo"])
     async def shards(self, ctx):
         """
-        Displays info about bot shards
+        Exibe informações sobre fragmentos de bot
 
         :param ctx: discord context
         """
         embed = discord.Embed(color=discord.Color(0xe74c3c), title="Shards",
-                              description="Each shard is a separate connection to Discord that handles a fraction "
-                                          "of all servers MediaForge is in.")
+                              description="Cada fragmento é uma conexão separada com o Discord que lida com uma fração "
+                                          "de todos os servidores em que o Ezgif está.")
         for i, shard in self.bot.shards.items():
             shard: discord.ShardInfo
             embed.add_field(name=f"Shard #{shard.id}", value=f"{round(shard.latency * 1000)}ms latency")
@@ -168,40 +168,40 @@ class Other(commands.Cog, name="Outros"):
     @commands.hybrid_command(aliases=["discord", "invite", "botinfo"])
     async def about(self, ctx):
         """
-        Lists important links related to MediaForge such as the official server.
+        Lista links importantes relacionados ao MediaForge, como o servidor oficial.
 
         :param ctx: discord context
         """
-        embed = discord.Embed(color=discord.Color(0xe74c3c), title="MediaForge")
-        embed.add_field(name="Official MediaForge Discord Server", value=f"https://discord.gg/xwWjgyVqBz")
+        embed = discord.Embed(color=discord.Color(0xe74c3c), title="Ezgif")
+        embed.add_field(name="O servidor de discord oficial do MediaForge", value=f"https://discord.gg/xwWjgyVqBz")
         embed.add_field(name="top.gg link", value=f"https://top.gg/bot/780570413767983122")
-        embed.add_field(name="Vote for MediaForge on top.gg", value=f"https://top.gg/bot/780570413767983122/vote")
-        embed.add_field(name="Add MediaForge to your server",
+        embed.add_field(name="Vote no Ezgif em top.gg", value=f"https://top.gg/bot/780570413767983122/vote")
+        embed.add_field(name="Adicione o Ezgif ao seu servidor",
                         value=f"https://discord.com/api/oauth2/authorize?client_id=780570413767983122&permissions=3"
                               f"79968&scope=bot")
-        embed.add_field(name="MediaForge GitHub", value=f"https://github.com/HexCodeFFF/mediaforge")
+        embed.add_field(name="Ezgif GitHub", value=f"https://github.com/Tzputao/ezgif")
         await ctx.reply(embed=embed)
 
     @commands.hybrid_command(aliases=["privacypolicy"])
     async def privacy(self, ctx):
         """
-        Shows MediaForge's privacy policy
+        Mostra a política de privacidade do Ezgif
 
         :param ctx: discord context
         """
-        embed = discord.Embed(color=discord.Color(0xe74c3c), title="Privacy Policy")
-        embed.add_field(name="What MediaForge Collects",
+        embed = discord.Embed(color=discord.Color(0xe74c3c), title="Política de Privacidade")
+        embed.add_field(name="O que o MediaForge coleta",
                         value=f"MediaForge has a sqlite database with the **sole purpose** of storing "
-                              f"guild-specific command prefixes. **All** other data is *always* deleted when it is "
-                              f"done with. MediaForge displays limited info "
-                              f"about commands being run to the console of the host machine for debugging purposes."
-                              f" This data is not stored either.")
-        embed.add_field(name="Contact about data", value=f"There really isn't anything to contact me about since "
-                                                         f"MediaForge doesn't have any form of long term data "
-                                                         f"storage, but you can join the MediaForge discord "
-                                                         f"server (https://discord.gg/QhMyz3n4V7) or raise an "
-                                                         f"issue on the GitHub ("
-                                                         f"https://github.com/HexCodeFFF/mediaforge).")
+                              f"guild-specific prefixos de comando. **Todos** os outros dados são *sempre* excluídos quando são "
+                              f"feito com. Ezgif exibe informações limitadas "
+                              f"sobre comandos sendo executados no console da máquina host para fins de depuração."
+                              f" Esses dados também não são armazenados.")
+        embed.add_field(name="Contato sobre dados", value=f"Realmente não há nada para entrar em contato comigo desde "
+                                                         f"O Ezgif não possui nenhuma forma de dados de longo prazo "
+                                                         f"armazenamento, mas você pode entrar no discord do Ezgif "
+                                                         f"server (https://discord.gg/QhMyz3n4V7) ou levantar um "
+                                                         f"problema no GitHub ("
+                                                         f"https://github.com/Tzputao/ezgif).")
         await ctx.reply(embed=embed)
 
     @commands.hybrid_command(aliases=["github", "git"])
@@ -218,14 +218,14 @@ class Other(commands.Cog, name="Outros"):
         with io.StringIO() as buf:
             buf.write(status)
             buf.seek(0)
-            await ctx.reply("Output of `git status` (the differences between this copy of MediaForge and the latest"
-                            " code on GitHub)", file=discord.File(buf, filename="gitstatus.txt"))
+            await ctx.reply("Saída do `git status` (as diferenças entre esta cópia do Ezgif e o último"
+                            " código no GitHub)", file=discord.File(buf, filename="gitstatus.txt"))
 
     @commands.hybrid_command(aliases=["ffmpeginfo"])
     async def ffmpegversion(self, ctx):
         """
-        Shows version information of FFmpeg running on this copy.
-        This command returns the output of `ffmpeg -version`.
+        Mostra informações da versão do FFmpeg em execução nesta cópia.
+        Este comando retorna a saída de `ffmpeg -version`.
 
         :param ctx: discord context
         """
@@ -233,7 +233,7 @@ class Other(commands.Cog, name="Outros"):
         with io.StringIO() as buf:
             buf.write(status)
             buf.seek(0)
-            await ctx.reply("Output of `ffmpeg -version`", file=discord.File(buf, filename="ffmpegversion.txt"))
+            await ctx.reply("Saída de `ffmpeg -version`", file=discord.File(buf, filename="ffmpegversion.txt"))
 
     @commands.hybrid_command()
     async def ajuda(self, ctx, *, inquiry: typing.Optional[str] = None):
@@ -257,7 +257,7 @@ class Other(commands.Cog, name="Outros"):
                 if showcog(c):
                     # add field for every cog
                     if not c.description:
-                        c.description = "No Description."
+                        c.description = "Sem descrição."
                     embed.add_field(name=c.qualified_name, value=c.description)
             await ctx.reply(embed=embed)
         # if the command argument matches the name of any of the cogs that contain any not hidden commands
@@ -265,13 +265,13 @@ class Other(commands.Cog, name="Outros"):
             # get the cog found
             cog = coglist[inquiry.lower()]
             embed = discord.Embed(title=cog.qualified_name,
-                                  description=cog.description + f"\nRun `{prefix}ajuda command` for "
-                                                                f"more information on a command.",
+                                  description=cog.description + f"\nExecute `{prefix}ajuda comando` para "
+                                                                f"mais informações sobre um comando.",
                                   color=discord.Color(0xe74c3c))
             # add field with description for every command in the cog
             for cmd in sorted(cog.get_commands(), key=lambda x: x.name):
                 if not cmd.hidden:
-                    desc = cmd.short_doc if cmd.short_doc else "No Description."
+                    desc = cmd.short_doc if cmd.short_doc else "sem descrição."
                     embed.add_field(name=f"{prefix}{cmd.name}", value=desc)
             await ctx.reply(embed=embed)
         else:
@@ -321,17 +321,17 @@ class Other(commands.Cog, name="Outros"):
                     paramajuda = discord.utils.get(docstring.params, arg_name=param.name)
                     # not found in docstring
                     if paramajuda is None:
-                        paramtext.append(f"**{param.name}** - No description")
+                        paramtext.append(f"**{param.name}** - sem descrição")
                         continue
                     # optional argument (param has a default value)
                     if param.default != param.empty:  # param.empty != None
-                        pend = f" (optional, defaults to `{param.default}`)"
+                        pend = f" (opcional, o padrão é `{param.default}`)"
                     else:
                         pend = ""
                     # format and add to paramtext list
                     paramajuda.description = paramajuda.description.replace('\n', ' ')
                     paramtext.append(f"**{param.name}** - "
-                                     f"{paramajuda.description if paramajuda.description else 'No description'}"
+                                     f"{paramajuda.description if paramajuda.description else 'sem descrição'}"
                                      f"{pend}")
                 mediaparamtext = []
                 for mediaparam in re.finditer(re.compile(":mediaparam ([^ :]+): ([^\n]+)"), cmd.ajuda):
@@ -343,16 +343,16 @@ class Other(commands.Cog, name="Outros"):
                     # entrar na lista e adicionar para ajudar
                     embed = add_long_field(embed, "Parameters", "\n".join(paramtext))
                 if len(mediaparamtext):
-                    mval = "*Media parameters are automatically collected from the channel.*\n" + \
+                    mval = "*Os parâmetros de mídia são coletados automaticamente do canal.*\n" + \
                            "\n".join(mediaparamtext)
-                    embed = add_long_field(embed, "Media Parameters", mval)
+                    embed = add_long_field(embed, "Parâmetros de mídia", mval)
                 if docstring.returns:
                     embed.add_field(name="Returns", value=docstring.returns.description, inline=False)
             else:
                 # if no docstring
-                embed.add_field(name="Command Information", value="This command has no information.", inline=False)
+                embed.add_field(name="Informações do Comando", value="Este comando não possui informações.", inline=False)
             # cmd.signature is a human readable list of args formatted like the manual usage
-            embed.add_field(name="Usage", value=prefix + cmd.name + " " + cmd.signature)
+            embed.add_field(name="Use", value=prefix + cmd.name + " " + cmd.signature)
             # if aliases, add
             if cmd.aliases:
                 embed.add_field(name="Aliases", value=", ".join([prefix + a for a in cmd.aliases]))
@@ -362,11 +362,11 @@ class Other(commands.Cog, name="Outros"):
     @commands.hybrid_command(aliases=["ffprobe"])
     async def info(self, ctx):
         """
-        Provides info on a media file.
-        Info provided is from ffprobe and libmagic.
+        Fornece informações sobre um arquivo de mídia.
+        As informações fornecidas são de ffprobe e libmagic.
 
         :param ctx: discord context
-        :mediaparam media: Any media file.
+        :mediaparam media: Qualquer arquivo de mídia.
         """
         async with utils.tempfiles.TempFileSession():
             file = await imagesearch(ctx, 1)
@@ -376,42 +376,42 @@ class Other(commands.Cog, name="Outros"):
                 await ctx.reply(f"`{result[1]}` `{result[2]}`\n```{result[0]}```")
                 # os.remove(file[0])
             else:
-                await ctx.send(f"{config.emojis['x']} No file found.")
+                await ctx.send(f"{config.emojis['x']} Nenhum arquivo encontrado.")
 
     @commands.hybrid_command()
     async def feedback(self, ctx):
         """
-        Give feedatabase.dback for the bot.
-        This sends various links from the github repo for reporting issues or asking questions.
+        Forneça feedatabase.dback para o bot.
+        Isso envia vários links do repositório github para relatar problemas ou fazer perguntas.
 
         :param ctx: discord context
         """
         embed = discord.Embed(title="Feedback",
-                              description="Feedatabase.dback is best given via the GitHub repo, various "
-                                          "links are provided below.",
+                              description="Feedatabase.dback é melhor fornecido por meio do repositório GitHub, vários "
+                                          "links são fornecidos abaixo.",
                               color=discord.Color(0xe74c3c))
-        embed.add_field(name="Report a bug",
-                        value="To report a bug, make an issue at\nhttps://github.com/HexCodeFFF/mediaforge/issues",
+        embed.add_field(name="Reportar um erro",
+                        value="Para relatar um bug, crie um problema em\nhttps://github.com/Tzputao/ezgif/issues",
                         inline=False)
-        embed.add_field(name="Ask a question", value="Have a question? Use the Q&A Discussion "
-                                                     "page.\nhttps://github.com/HexCodeFFF/mediaforge/discussions/c"
+        embed.add_field(name="Faça uma pergunta", value="Ter uma questão? Use a discussão de perguntas e respostas "
+                                                     "Página.\nhttps://github.com/Tzputao/ezgif/discussions/c"
                                                      "ategories/q-a", inline=False)
-        embed.add_field(name="Give an idea",
-                        value="Have an idea or suggestion? Use the Ideas Discussion page.\nhtt"
-                              "ps://github.com/HexCodeFFF/mediaforge/discussions/categories/id"
+        embed.add_field(name="Dê uma ideia",
+                        value="Tem uma ideia ou sugestão? Use a página de discussão de ideias.\nhtt"
+                              "ps://github.com/Tzputao/ezgif/discussions/categories/id"
                               "eas", inline=False)
-        embed.add_field(name="Something else?",
-                        value="Anything is welcome in the discussion page!\nhttps://github."
-                              "com/HexCodeFFF/mediaforge/discussions", inline=False)
-        embed.add_field(name="Why GitHub?",
-                        value="Using GitHub for feedback makes it much easier to organize any i"
-                              "ssues and to implement them into the bot's code.")
+        embed.add_field(name="Algo mais?",
+                        value="Qualquer coisa é bem-vinda na página de discussão!\nhttps://github."
+                              "com/Tzputao/ezgif/discussions", inline=False)
+        embed.add_field(name="Por que o GitHub?",
+                        value="Usar o GitHub para feedback torna muito mais fácil organizar qualquer i"
+                              "ssues e implementá-los no código do bot.")
         await ctx.reply(embed=embed)
 
     @commands.hybrid_command()
     async def attributions(self, ctx):
         """
-        Lists most libraries and programs this bot uses.
+        Lista a maioria das bibliotecas e programas que este bot usa.
 
         :param ctx: discord context
         """
@@ -424,12 +424,12 @@ class Other(commands.Cog, name="Outros"):
         Pong!
 
         :param ctx: discord context
-        :return: API and websocket latency
+        :return: Latência de API e websocket
         """
         start = time.perf_counter()
         message = await ctx.send("Ping...")
         end = time.perf_counter()
         duration = (end - start) * 1000
         await message.edit(content=f'🏓 Pong!\n'
-                                   f'API Latency: `{round(duration)}ms`\n'
-                                   f'Websocket Latency: `{round(self.bot.latency * 1000)}ms`')
+                                   f'Latência da API: `{round(duration)}ms`\n'
+                                   f'Latência do Websocket: `{round(self.bot.latency * 1000)}ms`')
