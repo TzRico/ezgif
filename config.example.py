@@ -31,7 +31,7 @@ way_too_big_size = 100_000_000
 # o texto a ser usado para mensagens diferentes, pode ser emojis personalizados ou qualquer texto
 emojis = {
     "x": "<:xmark:803792052932444180>",
-    "warning": "<:wmark:803791399782580284>",
+    "warning": "<:wmark:1059038815529992242>",
     "question": "<:qmark:803791399615070249>",
     "exclamation_question": "<:eqmark:1059039044954243162>",
     "2exclamation": "<:eemark:1059039133340815420>",

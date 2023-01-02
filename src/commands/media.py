@@ -12,7 +12,7 @@ import processing.vips.other
 import processing.other
 
 
-class Media(commands.Cog, name="<:setared:1059251849791803443>Edição"):
+class Media(commands.Cog, name="Edição"):
     """
     Comandos básicos de edição/processamento de mídia.
     """

@@ -23,7 +23,7 @@ from utils.scandiscord import tenorsearch
 from utils.tempfiles import reserve_tempfile
 
 
-class Conversion(commands.Cog, name="<:setared:1059251849791803443>Conversão"):
+class Conversion(commands.Cog, name="Conversão"):
     """
     Comandos para converter tipos de mídia e baixar mídia hospedada na Internet.
     """

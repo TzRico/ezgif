@@ -10,7 +10,7 @@ from core.process import process
 from processing import sus
 
 
-class Image(commands.Cog, name="<:setared:1059251849791803443>Criação"):
+class Image(commands.Cog, name="Criação"):
     """
     Gere imagens a partir de um modelo.
     """

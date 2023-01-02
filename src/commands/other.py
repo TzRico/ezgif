@@ -24,7 +24,7 @@ from utils.web import saveurls
 import utils.tempfiles
 
 
-class Other(commands.Cog, name="<:setared:1059251849791803443>Outro"):
+class Other(commands.Cog, name="Outros"):
     """
     Comandos que não se enquadram nas outras categorias.
     """
@@ -207,9 +207,9 @@ class Other(commands.Cog, name="<:setared:1059251849791803443>Outro"):
     @commands.hybrid_command(aliases=["github", "git"])
     async def version(self, ctx):
         """
-        Shows information on how this copy of MediaForge compares to the latest code on github.
-        https://github.com/HexCodeFFF/mediaforge
-        This command returns the output of `git status`.
+        Mostra informações sobre como esta cópia do Ezgif se compara ao código mais recente no github.
+        https://github.com/Tzputao/ezgif
+        Este comando retorna a saída de `git status`.
 
         :param ctx: discord context
         """
@@ -249,7 +249,8 @@ class Other(commands.Cog, name="<:setared:1059251849791803443>Outro"):
         if inquiry is None:
             embed = discord.Embed(title="<a:ezfogo:1059267224235413544> ajuda", color=discord.Color(0xe74c3c),
                                   description=f"Execute `{prefix}ajuda <categoria>` para listar comandos de "
-                                              f"uma categoria.")
+                                              f"uma categoria.", delete_after=20,
+                                mention_author=False)
             # for every cog
             for c in self.bot.cogs.values():
                 # if there is 1 or more non-hidden command
@@ -295,8 +296,8 @@ class Other(commands.Cog, name="<:setared:1059251849791803443>Outro"):
                         allcmds += cmd.aliases
                 match = difflib.get_close_matches(inquiry, allcmds, n=1, cutoff=0)[0]
                 raise commands.BadArgument(
-                    f"`{inquiry}` is not the name of a command or a command category. "
-                    f"Did you mean `{match}`?")
+                    f"`{inquiry}` não é o nome de um comando ou uma categoria de comando. "
+                    f"Você quis dizer `{match}`?")
                 # past this assume cmd is defined
             embed = discord.Embed(title=prefix + cmd.name, description=cmd.cog_name,
                                   color=discord.Color(0xe74c3c))
@@ -310,8 +311,8 @@ class Other(commands.Cog, name="<:setared:1059251849791803443>Outro"):
                         f"{f'**{docstring.short_description}**' if docstring.short_description else ''}" \
                         f"\n{docstring.long_description if docstring.long_description else ''}"
                 else:
-                    command_information = "This command has no information."
-                embed = add_long_field(embed, "Command Information", command_information)
+                    command_information = "Este comando não tem informações."
+                embed = add_long_field(embed, "Informação de comando", command_information)
 
                 paramtext = []
                 # for every "clean paramater" (no self or ctx)

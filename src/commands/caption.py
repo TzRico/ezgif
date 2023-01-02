@@ -7,7 +7,7 @@ import processing.vips.vipsutils
 from core.process import process
 
 
-class Caption(commands.Cog, name="<:setared:1059251849791803443>Legendas"):
+class Caption(commands.Cog, name="Legendas"):
     """
     Comandos para legendar mídia.
     """
