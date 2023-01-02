@@ -248,7 +248,6 @@ class Other(commands.Cog, name="<:setared:1059251849791803443>Outro"):
         # unspecified inquiry
         if inquiry is None:
             embed = discord.Embed(title="<a:e_fogoVermelho:767757751346397194> ajuda", color=discord.Color(0xe74c3c),
-            embed.set_footer(name="Desenvolvido por Tz#0001")
                                   description=f"Execute `{prefix}ajuda <categoria>` para listar comandos de "
                                               f"uma categoria.")
             # for every cog
