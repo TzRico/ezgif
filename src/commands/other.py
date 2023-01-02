@@ -249,8 +249,7 @@ class Other(commands.Cog, name="Outros"):
         if inquiry is None:
             embed = discord.Embed(title="<a:ezfogo:1059267224235413544> ajuda", color=discord.Color(0xe74c3c),
                                   description=f"Execute `{prefix}ajuda <categoria>` para listar comandos de "
-                                              f"uma categoria.", delete_after=20,
-                                mention_author=False)
+                                              f"uma categoria.")
             # for every cog
             for c in self.bot.cogs.values():
                 # if there is 1 or more non-hidden command
