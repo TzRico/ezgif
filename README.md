@@ -2,14 +2,13 @@
 
 ## informações técnicas gerais sobre o bot
 
-- inspirado by [esmBot](https://github.com/esmBot/esmBot)
 - usa discord.py 2
 - usa libvips para legendagem
 - usa FFmpeg para processamento de mídia
 
 ## auto-hospedagem com docker
 
-### to install
+### para instalar
 
 Tudo o que você precisa para instalar você mesmo é [Docker Desktop](https://docs.docker.com/get-docker/)
 
@@ -37,7 +36,7 @@ fichas de discórdia e tenor. certifique-se de não adicionar ou remover aspas. 
 se você não quiser usar o editor de texto embutido, você pode [obter a configuração de exemplo do GitHub](config.example.py), segure
 pressione `CTRL+K` para limpar o arquivo e use `CTRL+V` para colar sua configuração.
 
-### to run
+### para ligar o bot
 
 execute `docker ps -a` em seu terminal para ver a imagem do docker criada. seu contêiner deve ter 12 caracteres"ID",
 que você precisará para executá-lo.
@@ -48,7 +47,7 @@ execute no seu terminal favorito:
 docker start -ia gifmaker
 ```
 
-### to stop
+### parar
 
 matar a janela do terminal/`CTRL+C` não matará o bot, porque o docker é executado em segundo plano.
 
@@ -82,7 +81,7 @@ docker update --memory 9000M --memory-swap -1 --cpus "3.9" mediaforge
 
 isso é projetado para funcionar com provedores de hospedagem onde o controle de terminal não é possível. Existem 3 argumentos para isso
 modo que pode ser definido como
-docker [bconstruir argumentos](https://docs.docker.com/engine/reference/commandline/build/#set-build-time-variables---build-arg)
+docker [construir argumentos](https://docs.docker.com/engine/reference/commandline/build/#set-build-time-variables---build-arg)
 or [variáveis ​​ambientais](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file)
 .
 `AUTOMODE`: definido como "ON" para habilitar o modo automático
@@ -96,15 +95,15 @@ or [variáveis ​​ambientais](https://docs.docker.com/engine/reference/comman
 - `base64 config.py` prints the output to terminal
 - `base64 config.py > config.txt` writes the output to `config.txt`
 
-##### com píton:
+##### com python:
 
 ```python
 import base64
 
 with open("config.py", "rb") as f:
     out = base64.b64encode(f.read())
-print(out)  # write to terminal
-# write to file
+print(out)  # escrever no terminal
+# gravar no arquivo
 with open("config.txt", "wb+") as f:
     f.write(out)
 ```

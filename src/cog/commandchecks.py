@@ -16,21 +16,21 @@ class CommandChecksCog(commands.Cog):
     async def banned_users(self, ctx: commands.Context):
         if await self.bot.is_owner(ctx.author):
             return True
-        async with database.db.execute("SELECIONE o motivo do banimento dos banimentos WHERE user=?", (ctx.author.id,)) as cur:
+        async with database.db.execute("SELECT banreason from bans WHERE user=?", (ctx.author.id,)) as cur:
             ban = await cur.fetchone()
         if ban:
-            outtext = "Você foi banido deste bot"
+            outtext = "You are banned from this bot"
             if ban[0]:
-                outtext += f" pelo seguinte motivo:\n{quote(ban[0])}\n"
+                outtext += f" for the following reason:\n{quote(ban[0])}\n"
             else:
                 outtext += f".\n"
             outtext += f"To appeal this, "
             if self.bot.owner_id == 214511018204725248:  # my ID; public bot
-                outtext += "levantar uma questão em https://github.com/HexCodeFFF/mediaforge/issues/new?assignees=" \
+                outtext += "raise an issue at https://github.com/HexCodeFFF/mediaforge/issues/new?assignees=" \
                            "&labels=unban+request&template=unban_request.yaml&title=Unban+request+for" \
                            "+%3CYOUR+NAME+HERE%3E"
             else:
-                outtext += "entre em contato com o proprietário do bot."
+                outtext += "contact the bot owner."
             raise commands.CheckFailure(outtext)
         else:
             return True
@@ -48,8 +48,8 @@ class CommandChecksCog(commands.Cog):
 
     # @commands.check
     async def cooldown_check(self, ctx):
-        # sem cooldown para ajuda
-        if ctx.command.name == "ajuda":
+        # no cooldown for help
+        if ctx.command.name == "help":
             return True
         # owner(s) are exempt from cooldown
         if await self.bot.is_owner(ctx.message.author):
