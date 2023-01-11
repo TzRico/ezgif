@@ -2,10 +2,10 @@
 
 updategit() {
   # remoto não é configurado por padrão quando o contêiner é configurado
-  echo "Atualizando o código do gifmaker..."
+  echo "Atualizando o código do ezgif..."
   if [ ! -d ".git" ]; then
     git init . --initial-branch=master
-    git remote add origin https://github.com/Tzputao/ezgif.git
+    git remote add origin https://github.com/Tzrico/ezgif.git
   fi
   git fetch --all
   git reset --hard origin/master
