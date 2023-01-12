@@ -50,7 +50,7 @@ tips = {
     "File Formats": "O Ezgif oferece suporte a formatos de imagem estática como PNG, formatos de imagem animada como GIF e vídeo "
                     "formatos como MP4.",
     "Self-Hosting": "Ezgif é completamente open source e qualquer um pode hospedar um clone "
-                    "themself!\nhttps://github.com/Tzputao/ezgif "
+                    "themself!\nhttps://github.com/Tzrico/ezgif "
 }
 # https://www.reddit.com/r/discordapp/comments/aflp3p/the_truth_about_discord_file_upload_limits/
 # limite de upload configurado, em bytes, para arquivos.

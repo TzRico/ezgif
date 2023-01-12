@@ -154,10 +154,10 @@ class ErrorHandlerCog(commands.Cog):
                 desc = "Relate este erro com o arquivo traceback anexado ao GitHub."
             embed = discord.Embed(color=0xed1c24, description=desc)
             embed.add_field(name=f"{config.emojis['2exclamation']} Relatar problema ao GitHub",
-                            value=f"[Criar novo problema](https://github.com/Tzputao/ezgif"
+                            value=f"[Criar novo problema](https://github.com/Tzrico/ezgif"
                                   f"/issues/new?labels=bug&template=bug_report.md&title"
                                   f"={urllib.parse.quote(str(commanderror), safe='')[:848]})\n[View Issu"
-                                  f"es](https://github.com/Tzputao/ezgif/issues)")
+                                  f"es](https://github.com/Tzrico/ezgif/issues)")
             with io.BytesIO() as buf:
                 trheader = f"DATETIME:{datetime.datetime.now()}\nCOMMAND:{ctx.message.content}\nTRACEBACK:\n"
                 buf.write(bytes(trheader + ''.join(

@@ -179,7 +179,7 @@ class Other(commands.Cog, name="Outros"):
         embed.add_field(name="Adicione o Ezgif ao seu servidor",
                         value=f"https://discord.com/api/oauth2/authorize?client_id=780570413767983122&permissions=3"
                               f"79968&scope=bot")
-        embed.add_field(name="Ezgif GitHub", value=f"https://github.com/Tzputao/ezgif")
+        embed.add_field(name="Ezgif GitHub", value=f"https://github.com/Tzrico/ezgif")
         await ctx.reply(embed=embed)
 
     @commands.hybrid_command(aliases=["privacypolicy"])
@@ -201,14 +201,14 @@ class Other(commands.Cog, name="Outros"):
                                                          f"armazenamento, mas você pode entrar no discord do Ezgif "
                                                          f"server (https://discord.gg/QhMyz3n4V7) ou levantar um "
                                                          f"problema no GitHub ("
-                                                         f"https://github.com/Tzputao/ezgif).")
+                                                         f"https://github.com/Tzrico/ezgif).")
         await ctx.reply(embed=embed)
 
     @commands.hybrid_command(aliases=["github", "git"])
     async def version(self, ctx):
         """
         Mostra informações sobre como esta cópia do Ezgif se compara ao código mais recente no github.
-        https://github.com/Tzputao/ezgif
+        https://github.com/Tzrico/ezgif
         Este comando retorna a saída de `git status`.
 
         :param ctx: discord context
@@ -390,18 +390,18 @@ class Other(commands.Cog, name="Outros"):
                                           "links são fornecidos abaixo.",
                               color=discord.Color(0xe74c3c))
         embed.add_field(name="Reportar um erro",
-                        value="Para relatar um bug, crie um problema em\nhttps://github.com/Tzputao/ezgif/issues",
+                        value="Para relatar um bug, crie um problema em\nhttps://github.com/Tzrico/ezgif/issues",
                         inline=False)
         embed.add_field(name="Faça uma pergunta", value="Ter uma questão? Use a discussão de perguntas e respostas "
-                                                     "Página.\nhttps://github.com/Tzputao/ezgif/discussions/c"
+                                                     "Página.\nhttps://github.com/Tzrico/ezgif/discussions/c"
                                                      "ategories/q-a", inline=False)
         embed.add_field(name="Dê uma ideia",
                         value="Tem uma ideia ou sugestão? Use a página de discussão de ideias.\nhtt"
-                              "ps://github.com/Tzputao/ezgif/discussions/categories/id"
+                              "ps://github.com/Tzrico/ezgif/discussions/categories/id"
                               "eas", inline=False)
         embed.add_field(name="Algo mais?",
                         value="Qualquer coisa é bem-vinda na página de discussão!\nhttps://github."
-                              "com/Tzputao/ezgif/discussions", inline=False)
+                              "com/Tzrico/ezgif/discussions", inline=False)
         embed.add_field(name="Por que o GitHub?",
                         value="Usar o GitHub para feedback torna muito mais fácil organizar qualquer i"
                               "ssues e implementá-los no código do bot.")

@@ -18,7 +18,7 @@ bibliotecas apt MediaForge faz, veja [auto-hospedar nativamente](#to-self-host-n
 depois de instalado, execute esses comandos no terminal de sua escolha.
 
 ```shell
-docker build -t tzrico/gifmaker https://github.com/Tzputao/gifmaker.git
+docker build -t tzrico/gifmaker https://github.com/Tzrico/gifmaker.git
 docker run -it --cap-add SYS_NICE --shm-size 8G --name gifmaker tzrico/gifmaker
 ```
 

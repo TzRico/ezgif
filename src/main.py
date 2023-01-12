@@ -35,7 +35,7 @@ try:
 except ModuleNotFoundError as e:
     print("".join(traceback.format_exception(type(e), e, tb=e.__traceback__)), file=sys.stderr)
     sys.exit("O Ezgif não conseguiu importar as bibliotecas e arquivos necessários. Você seguiu o guia de auto-hospedagem "
-             "no GitHub? https://github.com/Tzputao/ezgif#to-self-host")
+             "no GitHub? https://github.com/Tzrico/ezgif#to-self-host")
 
 # project files
 import core.database
@@ -61,7 +61,7 @@ from commands.other import Other
 docker = os.environ.get('AM_I_IN_A_DOCKER_CONTAINER', False)
 if not hasattr(config, "bot_token") or config.bot_token == "EXAMPLE_TOKEN":
     sys.exit("O token do bot não foi encontrado ou não foi definido corretamente. Certifique-se de seguir a auto-hospedagem "
-             "guia no GitHub. https://github.com/Tzputao/ezgif#to-self-host")
+             "guia no GitHub. https://github.com/Tzrico/ezgif#to-self-host")
 
 # make copy of .reply() function
 discord.Message.orig_reply = discord.Message.reply
